@@ -7,7 +7,6 @@ public class Menu {
     private String sideMenu;
     private String soup;
     private String gimchi;
-    private String restaurant;
 
     public Menu(String rice, String mainMenu, String sideMenu, String soup, String gimchi) {
         this.rice = rice;
