@@ -15,7 +15,7 @@ public class CafeteriaMenuReccomendator {
     private JPanel contentPanel;
     private JPanel buttonPanel;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
 
         application.run();
@@ -24,7 +24,7 @@ public class CafeteriaMenuReccomendator {
     private void run() {
         frame = new JFrame("학식메뉴 알리미");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000,700);
+        frame.setSize(1000, 700);
 
         initButtonPanel();
 
@@ -34,17 +34,21 @@ public class CafeteriaMenuReccomendator {
 
         contentPanel.add(createStartButton());
 
-//        buttonPanel.add(createMenuPanel());
 
         frame.setVisible(true);
     }
 
     private JButton createStartButton() {
         JButton button = new JButton("시작하기!");
-        button.setVerticalAlignment(JButton.CENTER);
+        setBorder(contentPanel, 300, 400, 300, 400);
         button.addActionListener(e -> {
+            buttonPanel.add(createMenuPanel());
         });
         return button;
+    }
+
+    private void setBorder(JPanel panel, int top, int left, int bottom, int right) {
+        panel.setBorder(BorderFactory.createEmptyBorder(top,left,bottom,right));
     }
 
     private void initButtonPanel() {
@@ -60,6 +64,8 @@ public class CafeteriaMenuReccomendator {
 
     private void initContentPanel() {
         contentPanel = new JPanel();
+
+        contentPanel.setLayout(new BorderLayout());
 
         frame.add(contentPanel);
     }
