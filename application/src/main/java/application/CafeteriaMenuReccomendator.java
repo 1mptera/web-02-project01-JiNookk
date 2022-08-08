@@ -35,7 +35,7 @@ public class CafeteriaMenuReccomendator {
 
         frame = new JFrame("학식메뉴 알리미");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 700);
+        frame.setSize(1200, 700);
 
         initButtonPanel();
 
@@ -58,6 +58,7 @@ public class CafeteriaMenuReccomendator {
         contentPanel = new JPanel();
 
         contentPanel.setLayout(new BorderLayout());
+
 
         frame.add(contentPanel);
     }
@@ -131,10 +132,11 @@ public class CafeteriaMenuReccomendator {
 
     private JPanel menuPanel() throws FileNotFoundException {
         JPanel panel = new JPanel();
-//        panel.setLayout(new GridLayout(2,2));
+
+        panel.setLayout(new GridLayout(1,3));
         panel.add(geumjeongPanel());
-//        panel.add(studentHallMenuPanel());
-//        panel.add(staffCafeteriaMenuPanel());
+        panel.add(studentHallMenuPanel());
+        panel.add(staffCafeteriaMenuPanel());
 
         return panel;
     }
@@ -143,11 +145,33 @@ public class CafeteriaMenuReccomendator {
     // 금정회관, 교직원식당, 학생회관
 
     private JPanel geumjeongPanel() throws FileNotFoundException {
-        Restaurant restaurant = new Restaurant("금정회관",
-                new File("./src/main/resources/menus/금정회관.csv"),
+        Restaurant geumjeong = new Restaurant("금정회관",
+                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/금정회관.csv"),
                 new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/금정회관영양성분.csv")
                 , 3500);
 
+        return cafeteriaPanel(geumjeong);
+    }
+
+    private JPanel studentHallMenuPanel() throws FileNotFoundException {
+        Restaurant studentHall = new Restaurant("학생회관",
+                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/학생회관.csv"),
+                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/학생회관영양성분.csv")
+                , 5500);
+
+        return cafeteriaPanel(studentHall);
+    }
+
+    private JPanel staffCafeteriaMenuPanel() throws FileNotFoundException {
+        Restaurant staffCafeteria = new Restaurant("교직원식당",
+                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/교직원식당.csv"),
+                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/교직원식당영양성분.csv")
+                , 5500);
+
+        return cafeteriaPanel(staffCafeteria);
+    }
+
+    private JPanel cafeteriaPanel(Restaurant restaurant) throws FileNotFoundException {
         JPanel panel = new JPanel();
 
         Menu menu = parser.parseMenu(restaurant.menuFile());
@@ -161,6 +185,7 @@ public class CafeteriaMenuReccomendator {
         updateDisplay();
         return panel;
     }
+
     private JPanel cafeteriaMenu(Restaurant restaurant, Menu menu) throws FileNotFoundException {
         JPanel panel = new JPanel();
         panel.setBackground(Color.cyan);
@@ -179,7 +204,10 @@ public class CafeteriaMenuReccomendator {
 
     private JPanel menuNutritions(Nutrition nutrition) {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 1,10,30));
+        panel.setLayout(new GridLayout(7, 1,0,30));
+
+        panel.setBackground(Color.YELLOW);
+
 
         panel.add(new JLabel("메인 메뉴 영양성분 (100g당)"));
         panel.add(new JLabel("탄수화물: " + nutrition.carbonHydratePer100g()));
@@ -193,14 +221,6 @@ public class CafeteriaMenuReccomendator {
     }
 
 
-    //
-//    private JPanel studentHallMenuPanel() {
-//        return new JPanel();
-//    }
-//
-//    private JPanel staffCafeteriaMenuPanel() {
-//        return new JPanel();
-//    }
     public void updateDisplay() {
         buttonPanel.setVisible(false);
         buttonPanel.setVisible(true);
@@ -208,4 +228,5 @@ public class CafeteriaMenuReccomendator {
         contentPanel.setVisible(true);
         frame.setVisible(true);
     }
+
 }
