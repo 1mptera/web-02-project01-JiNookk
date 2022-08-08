@@ -11,11 +11,15 @@ import models.Nutrition;
 import models.Restaurant;
 //import panel.MenuPanel;
 import utils.Parser;
+import utils.URLRepository;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class CafeteriaMenuReccomendator {
 
@@ -23,6 +27,7 @@ public class CafeteriaMenuReccomendator {
     private JPanel contentPanel;
     private JPanel buttonPanel;
     private Parser parser;
+    private URLRepository urlRepsitory;
 
     public static void main(String[] args) {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -31,6 +36,7 @@ public class CafeteriaMenuReccomendator {
     }
 
     private void run() {
+        urlRepsitory = new URLRepository();
         parser = new Parser();
 
         frame = new JFrame("학식메뉴 알리미");
@@ -133,7 +139,7 @@ public class CafeteriaMenuReccomendator {
     private JPanel menuPanel() throws FileNotFoundException {
         JPanel panel = new JPanel();
 
-        panel.setLayout(new GridLayout(1,3));
+        panel.setLayout(new GridLayout(1, 3));
         panel.add(geumjeongPanel());
         panel.add(studentHallMenuPanel());
         panel.add(staffCafeteriaMenuPanel());
@@ -145,28 +151,19 @@ public class CafeteriaMenuReccomendator {
     // 금정회관, 교직원식당, 학생회관
 
     private JPanel geumjeongPanel() throws FileNotFoundException {
-        Restaurant geumjeong = new Restaurant("금정회관",
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/금정회관.csv"),
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/금정회관영양성분.csv")
-                , 3500);
+        Restaurant geumjeong = new Restaurant("금정회관", new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/금정회관.csv"), new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/금정회관영양성분.csv"), 3500);
 
         return cafeteriaPanel(geumjeong);
     }
 
     private JPanel studentHallMenuPanel() throws FileNotFoundException {
-        Restaurant studentHall = new Restaurant("학생회관",
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/학생회관.csv"),
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/학생회관영양성분.csv")
-                , 5500);
+        Restaurant studentHall = new Restaurant("학생회관", new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/학생회관.csv"), new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/학생회관영양성분.csv"), 5500);
 
         return cafeteriaPanel(studentHall);
     }
 
     private JPanel staffCafeteriaMenuPanel() throws FileNotFoundException {
-        Restaurant staffCafeteria = new Restaurant("교직원식당",
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/교직원식당.csv"),
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/교직원식당영양성분.csv")
-                , 5500);
+        Restaurant staffCafeteria = new Restaurant("교직원식당", new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/menus/교직원식당.csv"), new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/교직원식당영양성분.csv"), 5500);
 
         return cafeteriaPanel(staffCafeteria);
     }
@@ -179,7 +176,7 @@ public class CafeteriaMenuReccomendator {
         Nutrition nutrition = parser.parseNutrition(restaurant.nutritionFile());
 
         panel.add(cafeteriaMenu(restaurant, menu));
-        panel.add(menuNutritions(nutrition));
+        panel.add(menuNutritions(nutrition, menu));
 
         setBorder(contentPanel, 0, 0, 0, 0);
         updateDisplay();
@@ -189,7 +186,7 @@ public class CafeteriaMenuReccomendator {
     private JPanel cafeteriaMenu(Restaurant restaurant, Menu menu) throws FileNotFoundException {
         JPanel panel = new JPanel();
         panel.setBackground(Color.cyan);
-        panel.setLayout(new GridLayout(7, 1, 0, 30));
+        panel.setLayout(new GridLayout(8, 1, 0, 30));
 
         panel.add(new JLabel(restaurant.name()));
         panel.add(new JLabel(restaurant.price() + "원"));
@@ -198,16 +195,18 @@ public class CafeteriaMenuReccomendator {
         panel.add(new JLabel(menu.sideMenu()));
         panel.add(new JLabel(menu.soup()));
         panel.add(new JLabel(menu.gimchi()));
+        JButton button = new JButton();
+        button.setBorderPainted(false);
+        panel.add(button);
 
         return panel;
     }
 
-    private JPanel menuNutritions(Nutrition nutrition) {
+    private JPanel menuNutritions(Nutrition nutrition, Menu menu) {
         JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(7, 1,0,30));
+        panel.setLayout(new GridLayout(8, 1, 0, 30));
 
         panel.setBackground(Color.YELLOW);
-
 
         panel.add(new JLabel("메인 메뉴 영양성분 (100g당)"));
         panel.add(new JLabel("탄수화물: " + nutrition.carbonHydratePer100g()));
@@ -217,7 +216,27 @@ public class CafeteriaMenuReccomendator {
         panel.add(new JLabel("포화지방: " + nutrition.saturatedFatPer100g()));
         panel.add(new JLabel("열량: " + nutrition.caloriesPer100g()));
 
+        panel.add(informationUrlButton(menu));
+
         return panel;
+    }
+
+    private JButton informationUrlButton(Menu menu) {
+        JButton button = new JButton("자세히");
+        button.setForeground(Color.BLUE);
+        button.addActionListener(e -> {
+            String url = urlRepsitory.url(menu.mainMenu());
+
+            try{
+                Desktop.getDesktop().browse(new URI(url));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (URISyntaxException ex) {
+                ex.printStackTrace();
+            }
+        });
+        button.setBorderPainted(false);
+        return button;
     }
 
 
