@@ -16,7 +16,7 @@ class ParserTest {
 
         Menu parsedMenu = parser.parseMenu(new File("./src/main/resources/menus/금정회관.csv"));
 
-        assertEquals(new Menu("백미밥", "순살치킨/갈비맛소스",
+        assertEquals(new Menu("백미밥", "순살치킨",
                 "카레", "쇠고기미역국", "배추김치"), parsedMenu);
     }
 
