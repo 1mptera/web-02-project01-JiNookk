@@ -9,6 +9,7 @@ package application;// 내가 원하는 것
 import models.Menu;
 import models.Nutrition;
 import models.Restaurant;
+//import panel.MenuPanel;
 import utils.Parser;
 
 import javax.swing.*;
@@ -74,22 +75,25 @@ public class CafeteriaMenuReccomendator {
             removeContainer(buttonPanel);
             removeContainer(contentPanel);
 
+//            MenuPanel menuPanel = new MenuPanel(frame, buttonPanel, contentPanel);
+
             buttonPanel.add(createMenuPanel());
+
 
             updateDisplay();
         });
         return button;
     }
 
-    private void setBorder(JPanel panel, int top, int left, int bottom, int right) {
+    public void setBorder(JPanel panel, int top, int left, int bottom, int right) {
         panel.setBorder(BorderFactory.createEmptyBorder(top, left, bottom, right));
     }
 
-    private void removeContainer(JPanel panel) {
+    public void removeContainer(JPanel panel) {
         panel.removeAll();
     }
 
-    private JPanel createMenuPanel() {
+    private JPanel createMenuPanel() { // TODO : 홈 패널
         JPanel panel = new JPanel();
 
         panel.add(todayMenus());
@@ -97,22 +101,30 @@ public class CafeteriaMenuReccomendator {
         return panel;
     }
 
-    private void updateDisplay() {
-        buttonPanel.setVisible(false);
-        buttonPanel.setVisible(true);
-        contentPanel.setVisible(false);
-        contentPanel.setVisible(true);
-        frame.setVisible(true);
-    }
-
     private JButton todayMenus() {
         JButton button = new JButton("오늘의 메뉴 확인하기");
         button.addActionListener(e -> {
             try {
+                removeContainer(buttonPanel);
+
+                buttonPanel.add(backToMenuButton());
+
                 contentPanel.add(menuPanel());
             } catch (FileNotFoundException ex) {
                 throw new RuntimeException(ex);
             }
+        });
+        return button;
+    }
+
+    private JButton backToMenuButton() {
+        JButton button = new JButton("돌아가기");
+        button.addActionListener(e -> {
+            removeContainer(buttonPanel);
+            removeContainer(contentPanel);
+            buttonPanel.add(createMenuPanel());
+
+            updateDisplay();
         });
         return button;
     }
@@ -129,6 +141,7 @@ public class CafeteriaMenuReccomendator {
 
 
     // 금정회관, 교직원식당, 학생회관
+
     private JPanel geumjeongPanel() throws FileNotFoundException {
         Restaurant restaurant = new Restaurant("금정회관",
                 new File("./src/main/resources/menus/금정회관.csv"),
@@ -148,7 +161,6 @@ public class CafeteriaMenuReccomendator {
         updateDisplay();
         return panel;
     }
-
     private JPanel cafeteriaMenu(Restaurant restaurant, Menu menu) throws FileNotFoundException {
         JPanel panel = new JPanel();
         panel.setBackground(Color.cyan);
@@ -167,10 +179,9 @@ public class CafeteriaMenuReccomendator {
 
     private JPanel menuNutritions(Nutrition nutrition) {
         JPanel panel = new JPanel();
-        panel.add(new JLabel("메인 메뉴 영양성분 (100g당)"));
-
         panel.setLayout(new GridLayout(7, 1,10,30));
 
+        panel.add(new JLabel("메인 메뉴 영양성분 (100g당)"));
         panel.add(new JLabel("탄수화물: " + nutrition.carbonHydratePer100g()));
         panel.add(new JLabel("당: " + nutrition.sugarPer100g()));
         panel.add(new JLabel("단백질: " + nutrition.proteinPer100g()));
@@ -181,6 +192,7 @@ public class CafeteriaMenuReccomendator {
         return panel;
     }
 
+
     //
 //    private JPanel studentHallMenuPanel() {
 //        return new JPanel();
@@ -189,4 +201,11 @@ public class CafeteriaMenuReccomendator {
 //    private JPanel staffCafeteriaMenuPanel() {
 //        return new JPanel();
 //    }
+    public void updateDisplay() {
+        buttonPanel.setVisible(false);
+        buttonPanel.setVisible(true);
+        contentPanel.setVisible(false);
+        contentPanel.setVisible(true);
+        frame.setVisible(true);
+    }
 }
