@@ -1,4 +1,4 @@
-// 내가 원하는 것
+package application;// 내가 원하는 것
 // 1. 학생식당 메인메뉴 비교 (4 개)
 // 2.
 // 3.
@@ -13,6 +13,7 @@ public class CafeteriaMenuReccomendator {
 
     private JFrame frame;
     private JPanel contentPanel;
+    private JPanel buttonPanel;
 
     public static void main(String[] args){
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -25,18 +26,41 @@ public class CafeteriaMenuReccomendator {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000,700);
 
-        frame.add(createTitleLabel(), BorderLayout.NORTH);
+        initButtonPanel();
 
         initContentPanel();
 
-        contentPanel.add(createMenuPanel());
-        
-        
+        buttonPanel.add(createTitleLabel());
+
+        contentPanel.add(createStartButton());
+
+//        buttonPanel.add(createMenuPanel());
+
         frame.setVisible(true);
+    }
+
+    private JButton createStartButton() {
+        JButton button = new JButton("시작하기!");
+        button.setVerticalAlignment(JButton.CENTER);
+        button.addActionListener(e -> {
+        });
+        return button;
+    }
+
+    private void initButtonPanel() {
+        buttonPanel = new JPanel();
+        frame.add(buttonPanel, BorderLayout.NORTH);
+    }
+
+    private JLabel createTitleLabel() {
+        JLabel label = new JLabel("학식메뉴 알리미");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
     }
 
     private void initContentPanel() {
         contentPanel = new JPanel();
+
         frame.add(contentPanel);
     }
 
@@ -52,7 +76,9 @@ public class CafeteriaMenuReccomendator {
     }
 
     private JButton todayMenus() {
-        return new JButton();
+        JButton button = new JButton();
+
+        return button;
     }
 
     private JButton recordTodayMenu() {
@@ -64,12 +90,7 @@ public class CafeteriaMenuReccomendator {
     }
 
     private JButton addDataBase() {
-        return new JButton();
-    }
-
-    private JLabel createTitleLabel() {
-        JLabel label = new JLabel("학식메뉴 알리미");
-        label.setHorizontalAlignment(JLabel.CENTER);
-        return label;
+        JButton button = new JButton();
+        return button;
     }
 }

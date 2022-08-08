@@ -8,4 +8,6 @@ class MenuTest {
         Menu menu = new Menu("rice", "mainMenu","sideMenu","soup" , "gimchi");
     }
 
+
+
 }
