@@ -6,7 +6,10 @@ package application;// 내가 원하는 것
 // 도메인 모델 : menu
 
 
+import models.Menu;
+import models.Nutrition;
 import models.Restaurant;
+import utils.Parser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +21,7 @@ public class CafeteriaMenuReccomendator {
     private JFrame frame;
     private JPanel contentPanel;
     private JPanel buttonPanel;
+    private Parser parser;
 
     public static void main(String[] args) {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -26,7 +30,7 @@ public class CafeteriaMenuReccomendator {
     }
 
     private void run() {
-
+        parser = new Parser();
 
         frame = new JFrame("학식메뉴 알리미");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -116,7 +120,7 @@ public class CafeteriaMenuReccomendator {
     private JPanel menuPanel() throws FileNotFoundException {
         JPanel panel = new JPanel();
 //        panel.setLayout(new GridLayout(2,2));
-        panel.add(geumjeongMenuPanel());
+        panel.add(geumjeongPanel());
 //        panel.add(studentHallMenuPanel());
 //        panel.add(staffCafeteriaMenuPanel());
 
@@ -125,35 +129,59 @@ public class CafeteriaMenuReccomendator {
 
 
     // 금정회관, 교직원식당, 학생회관
-    private JPanel geumjeongMenuPanel() throws FileNotFoundException {
-        Restaurant restaurant = new Restaurant("금정회관", new File("./src/main/resources/금정회관.csv"), 3500);
+    private JPanel geumjeongPanel() throws FileNotFoundException {
+        Restaurant restaurant = new Restaurant("금정회관",
+                new File("./src/main/resources/menus/금정회관.csv"),
+                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/application/src/main/resources/nutritions/금정회관영양성분.csv")
+                , 3500);
 
         JPanel panel = new JPanel();
-        panel.setBackground(Color.cyan);
-        panel.setLayout(new GridLayout(2 + restaurant.categories().length, 1, 0, 30));
 
-        panel.add(cafeteriaNameLabel(restaurant.name()));
-        panel.add(cafeteriaPriceLabel(restaurant.price()));
+        Menu menu = parser.parseMenu(restaurant.menuFile());
 
-        for (String category : restaurant.categories()) {
-            panel.add(new JLabel(category));
-        }
+        Nutrition nutrition = parser.parseNutrition(restaurant.nutritionFile());
+
+        panel.add(cafeteriaMenu(restaurant, menu));
+        panel.add(menuNutritions(nutrition));
 
         setBorder(contentPanel, 0, 0, 0, 0);
-        contentPanel.setLayout(new GridLayout(1,3));
         updateDisplay();
         return panel;
     }
 
-    private JLabel cafeteriaPriceLabel(int price) {
-        return new JLabel(price + "원");
+    private JPanel cafeteriaMenu(Restaurant restaurant, Menu menu) throws FileNotFoundException {
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.cyan);
+        panel.setLayout(new GridLayout(7, 1, 0, 30));
+
+        panel.add(new JLabel(restaurant.name()));
+        panel.add(new JLabel(restaurant.price() + "원"));
+        panel.add(new JLabel(menu.rice()));
+        panel.add(new JLabel(menu.mainMenu()));
+        panel.add(new JLabel(menu.sideMenu()));
+        panel.add(new JLabel(menu.soup()));
+        panel.add(new JLabel(menu.gimchi()));
+
+        return panel;
     }
 
-    private JLabel cafeteriaNameLabel(String name) {
-        return new JLabel(name);
+    private JPanel menuNutritions(Nutrition nutrition) {
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("메인 메뉴 영양성분 (100g당)"));
+
+        panel.setLayout(new GridLayout(7, 1,10,30));
+
+        panel.add(new JLabel("탄수화물: " + nutrition.carbonHydratePer100g()));
+        panel.add(new JLabel("당: " + nutrition.sugarPer100g()));
+        panel.add(new JLabel("단백질: " + nutrition.proteinPer100g()));
+        panel.add(new JLabel("지방: " + nutrition.fatPer100g()));
+        panel.add(new JLabel("포화지방: " + nutrition.saturatedFatPer100g()));
+        panel.add(new JLabel("열량: " + nutrition.caloriesPer100g()));
+
+        return panel;
     }
 
-//
+    //
 //    private JPanel studentHallMenuPanel() {
 //        return new JPanel();
 //    }
