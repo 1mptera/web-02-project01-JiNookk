@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class RestaurantTest {
     @Test
     void creation(){
-        Restaurant restaurant = new Restaurant("restaurantName",new File(""), 3500);
+        Restaurant restaurant = new Restaurant("restaurantName", new File("./src/main/resources/menus/금정회관.csv"), new File(""), 3500);
     }
 
     @Test
     void geumjeongCategories() throws FileNotFoundException {
-        Restaurant restaurant = new Restaurant("금정회관",new File("./src/main/resources/금정회관.csv"), 3500);
+        Restaurant restaurant = new Restaurant("금정회관", new File("./src/main/resources/menus/금정회관.csv"), new File("./src/main/resources/menus/금정회관.csv"), 3500);
 
         String[] categories = restaurant.categories();
 

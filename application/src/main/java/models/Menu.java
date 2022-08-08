@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Objects;
+
 public class Menu {
 
     private String rice;
@@ -14,5 +16,43 @@ public class Menu {
         this.sideMenu = sideMenu;
         this.soup = soup;
         this.gimchi = gimchi;
+    }
+
+    public String rice() {
+        return rice;
+    }
+
+    public String mainMenu() {
+        return mainMenu;
+    }
+
+    public String sideMenu() {
+        return sideMenu;
+    }
+
+    public String soup() {
+        return soup;
+    }
+
+    public String gimchi() {
+        return gimchi;
+    }
+
+    public Nutrition findNutrition() {
+        return new Nutrition(10,0,15,16,5,252);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        Menu otherMenu = (Menu) other;
+
+        return Objects.equals(this.rice, otherMenu.rice) && Objects.equals(this.mainMenu, otherMenu.mainMenu)
+                && Objects.equals(this.sideMenu, otherMenu.sideMenu) && Objects.equals(this.soup, otherMenu.soup)
+                && Objects.equals(this.gimchi, otherMenu.gimchi);
+    }
+
+    @Override
+    public String toString() {
+        return rice + ", " + mainMenu + ", " + sideMenu + ", " + soup + ", " + gimchi;
     }
 }
