@@ -1,6 +1,10 @@
 package models;
 
 public class Nutrition {
+    public static final String PROTEIN = "단백질";
+    public static final String CALORIES = "칼로리";
+    public static final String SATURATEDFAT = "포화지방";
+
 
     private int carbonHydrate;
     private int sugar;

@@ -13,7 +13,7 @@ class SortTest {
     void sortNoNutrition() {
         Sort sort = new Sort();
 
-        List<Nutrition> sortedNutritions = sort.sortNutritions(List.of());
+        List<Nutrition> sortedNutritions = sort.sortNutritions(List.of(), "단백질");
 
         assertEquals(List.of(), sortedNutritions);
     }
@@ -28,7 +28,7 @@ class SortTest {
         nutritions.add(nutrition);
 
         List<Nutrition> sortedNutritions =
-                sort.sortNutritions(nutritions);
+                sort.sortNutritions(nutritions, "단백질");
 
         assertEquals(List.of(nutrition), sortedNutritions);
     }
@@ -70,7 +70,7 @@ class SortTest {
         );
 
         List<Nutrition> sortedNutritions =
-                sort.sortNutritions(nutritions);
+                sort.sortNutritions(nutritions, "단백질");
 
         assertEquals(sorted, sortedNutritions);
     }
@@ -121,7 +121,7 @@ class SortTest {
 
         List<Nutrition> nutritions = List.of();
 
-        String[] sortedByprotein = sort.sortByProtein(nutritions);
+        String[] sortedByprotein = sort.sortByProtein(nutritions, "단백질");
 
         assertArrayEquals(new String[]{}, sortedByprotein);
     }
@@ -133,7 +133,7 @@ class SortTest {
         List<Nutrition> nutritions = new ArrayList<>();
         nutritions.add(new Nutrition(0, 0, 0, 0, 0, 0, "금정"));
 
-        String[] sortedByprotein = sort.sortByProtein(nutritions);
+        String[] sortedByprotein = sort.sortByProtein(nutritions, "단백질");
 
         assertArrayEquals(new String[]{"금정"}, sortedByprotein);
     }
@@ -148,8 +148,8 @@ class SortTest {
         nutritions.add(new Nutrition(0, 0, 15, 0, 0, 0, "교직원식당"));
 
 
-        String[] sortedByprotein = sort.sortByProtein(nutritions);
+        String[] sortedByprotein = sort.sortByProtein(nutritions, "단백질");
 
-        assertArrayEquals(new String[]{"교직원식당","금정회관","학생회관"}, sortedByprotein);
+        assertArrayEquals(new String[]{"교직원식당", "금정회관", "학생회관"}, sortedByprotein);
     }
 }
