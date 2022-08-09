@@ -141,23 +141,25 @@ public class CafeteriaMenuReccomendator {
 
     private JPanel menuOptionPanel() {
         JPanel panel = new JPanel();
-        panel.add(proteinSortButton());
+        panel.add(sortButton(Nutrition.PROTEIN));
+        panel.add(sortButton(Nutrition.CALORIES));
+        panel.add(sortButton(Nutrition.SATURATEDFAT));
         panel.add(backToMenuButton());
         return panel;
     }
 
-    private JButton proteinSortButton() {
-        JButton button = new JButton("단백질 정렬");
+    private JButton sortButton(String nutrition) {
+        JButton button = new JButton(nutrition + " 정렬");
         button.addActionListener(e -> {
-            String[] panelsOrderByProtein = sort.sortByProtein(nutritionLists);
+            String[] sortedCafeteriaNames = sort.sortByProtein(nutritionLists, nutrition);
 
             removeContainer(contentPanel);
             removeContainer(menuPanel);
 
             contentPanel.add(menuPanel);
 
-            for (String panelOrderByProtein : panelsOrderByProtein){
-                if (panelOrderByProtein.equals("금정회관")){
+            for (String sortedCafeteriaName : sortedCafeteriaNames){
+                if (sortedCafeteriaName.equals("금정회관")){
                     try {
                         menuPanel.add(geumjeongPanel());
                     } catch (FileNotFoundException ex) {
@@ -165,7 +167,7 @@ public class CafeteriaMenuReccomendator {
                     }
                 }
 
-                if (panelOrderByProtein.equals("학생회관")){
+                if (sortedCafeteriaName.equals("학생회관")){
                     try {
                         menuPanel.add(studentHallMenuPanel());
                     } catch (FileNotFoundException ex) {
@@ -173,7 +175,7 @@ public class CafeteriaMenuReccomendator {
                     }
                 }
 
-                if (panelOrderByProtein.equals("교직원식당")){
+                if (sortedCafeteriaName.equals("교직원식당")){
                     try {
                         menuPanel.add(staffCafeteriaMenuPanel());
                     } catch (FileNotFoundException ex) {
