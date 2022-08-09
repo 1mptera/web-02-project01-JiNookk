@@ -19,5 +19,4 @@ public class RecordFrame extends JFrame{
 
         this.setVisible(true);
     }
-
 }

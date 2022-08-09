@@ -11,7 +11,7 @@ import models.Menu;
 import models.Nutrition;
 import models.Restaurant;
 //import panel.MenuPanel;
-import utils.Parser;
+import utils.Loader;
 import utils.Sort;
 import utils.URLRepository;
 
@@ -30,12 +30,13 @@ public class CafeteriaMenuReccomendator {
     private JFrame frame;
     private JPanel contentPanel;
     private JPanel buttonPanel;
-    private Parser parser;
+    private Loader loader;
     private URLRepository urlRepsitory;
     private List<Nutrition> nutritionLists;
     private Sort sort;
     private JPanel menuPanel;
     private List<Menu> menus;
+    private List<Restaurant> restaurants;
 
     public static void main(String[] args) {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -45,9 +46,10 @@ public class CafeteriaMenuReccomendator {
 
     private void run() {
         urlRepsitory = new URLRepository();
-        parser = new Parser();
+        loader = new Loader();
         sort = new Sort();
 
+        restaurants = new ArrayList<>();
         menus = new ArrayList<>();
         nutritionLists = new ArrayList<>();
 
@@ -130,7 +132,6 @@ public class CafeteriaMenuReccomendator {
         button.addActionListener(e -> {
             RecordFrame recordFrame = new RecordFrame(menus, nutritionLists);
 
-
         });
         return button;
     }
@@ -139,8 +140,7 @@ public class CafeteriaMenuReccomendator {
         JButton button = new JButton("오늘의 메뉴 확인하기");
         button.addActionListener(e -> {
             try {
-                resetMenus();
-                resetNutritionList();
+                resetRestaurants();
 
                 removeContainer(buttonPanel);
                 removeContainer(contentPanel);
@@ -155,9 +155,9 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
-    private void resetMenus() {
-        for (int i = 0; i < menus.size(); i += 1) {
-            menus.remove(menus.get(0));
+    private void resetRestaurants() {
+        for (int i = 0; i < restaurants.size(); i += 1) {
+            restaurants.remove(restaurants.get(0));
         }
     }
 
@@ -173,15 +173,15 @@ public class CafeteriaMenuReccomendator {
     private JButton sortButton(String nutrition) {
         JButton button = new JButton(nutrition + " 정렬");
         button.addActionListener(e -> {
-            String[] sortedCafeteriaNames = sort.sortByProtein(nutritionLists, nutrition);
+            String[] sortedCafeteriaNames = sort.sortByNutrition(restaurants, nutrition);
 
             removeContainer(contentPanel);
             removeContainer(menuPanel);
 
             contentPanel.add(menuPanel);
 
-            for (String sortedCafeteriaName : sortedCafeteriaNames){
-                if (sortedCafeteriaName.equals("금정회관")){
+            for (String sortedCafeteriaName : sortedCafeteriaNames) {
+                if (sortedCafeteriaName.equals("금정회관")) {
                     try {
                         menuPanel.add(geumjeongPanel());
                     } catch (FileNotFoundException ex) {
@@ -189,7 +189,7 @@ public class CafeteriaMenuReccomendator {
                     }
                 }
 
-                if (sortedCafeteriaName.equals("학생회관")){
+                if (sortedCafeteriaName.equals("학생회관")) {
                     try {
                         menuPanel.add(studentHallMenuPanel());
                     } catch (FileNotFoundException ex) {
@@ -197,7 +197,7 @@ public class CafeteriaMenuReccomendator {
                     }
                 }
 
-                if (sortedCafeteriaName.equals("교직원식당")){
+                if (sortedCafeteriaName.equals("교직원식당")) {
                     try {
                         menuPanel.add(staffCafeteriaMenuPanel());
                     } catch (FileNotFoundException ex) {
@@ -207,7 +207,6 @@ public class CafeteriaMenuReccomendator {
             }
 
             updateDisplay();
-
         });
         return button;
     }
@@ -222,20 +221,11 @@ public class CafeteriaMenuReccomendator {
             removeContainer(menuPanel);
             removeContainer(contentPanel);
 
-            resetMenus();
-            resetNutritionList();
-
             buttonPanel.add(createMenuPanel());
 
             updateDisplay();
         });
         return button;
-    }
-
-    private void resetNutritionList() {
-        for (int i = 0; i < nutritionLists.size(); i += 1) {
-            nutritionLists.remove(nutritionLists.get(0));
-        }
     }
 
     private JPanel menuPanel() throws FileNotFoundException {           // TODO : 메뉴와 영양성분이 배치되는 패널
@@ -250,31 +240,57 @@ public class CafeteriaMenuReccomendator {
 
     // 금정회관, 교직원식당, 학생회관
     private JPanel geumjeongPanel() throws FileNotFoundException {
-        Restaurant geumjeong = new Restaurant("금정회관",
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                        "application/src/main/resources/menus/금정회관.csv"),
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                        "application/src/main/resources/nutritions/금정회관영양성분.csv"), 3500);
+        File menuFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
+                "application/src/main/resources/menus/금정회관.csv");
+
+        File nutritionFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk" +
+                "/application/src/main/resources/nutritions/금정회관영양성분.csv");
+
+        Menu menu = loader.loadMenu(menuFile);
+
+        Nutrition nutrition = loader.loadNutrition(nutritionFile);
+
+        Restaurant geumjeong = new Restaurant("금정회관", menu, nutrition, 3500);
+
+        restaurants.add(geumjeong);
 
         return cafeteriaPanel(geumjeong);
     }
 
     private JPanel studentHallMenuPanel() throws FileNotFoundException {
-        Restaurant studentHall = new Restaurant("학생회관",
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                        "application/src/main/resources/menus/학생회관.csv"),
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                        "application/src/main/resources/nutritions/학생회관영양성분.csv"), 5500);
+        File menuFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
+                "application/src/main/resources/menus/학생회관.csv");
+
+        File nutritionFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk" +
+                "/application/src/main/resources/nutritions/학생회관영양성분.csv");
+
+        Menu menu = loader.loadMenu(menuFile);
+
+
+        Nutrition nutrition = loader.loadNutrition(nutritionFile);
+
+
+        Restaurant studentHall = new Restaurant("학생회관", menu, nutrition, 5500);
+
+        restaurants.add(studentHall);
 
         return cafeteriaPanel(studentHall);
     }
 
     private JPanel staffCafeteriaMenuPanel() throws FileNotFoundException {
-        Restaurant staffCafeteria = new Restaurant("교직원식당",
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                        "application/src/main/resources/menus/교직원식당.csv"),
-                new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                        "application/src/main/resources/nutritions/교직원식당영양성분.csv"), 5500);
+        File menuFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
+                "application/src/main/resources/menus/교직원식당.csv");
+
+        File nutritionFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk" +
+                "/application/src/main/resources/nutritions/교직원식당영양성분.csv");
+
+        Menu menu = loader.loadMenu(menuFile);
+
+        Nutrition nutrition = loader.loadNutrition(nutritionFile);
+
+        Restaurant staffCafeteria = new Restaurant("교직원식당", menu, nutrition, 5500);
+
+        restaurants.add(staffCafeteria);
 
         return cafeteriaPanel(staffCafeteria);
     }
@@ -282,12 +298,9 @@ public class CafeteriaMenuReccomendator {
     private JPanel cafeteriaPanel(Restaurant restaurant) throws FileNotFoundException {
         JPanel panel = new JPanel();
 
-        Menu menu = parser.parseMenu(restaurant.menuFile());
-        menus.add(menu);
+        Menu menu = restaurant.menu();
 
-        Nutrition nutrition = parser.parseNutrition(restaurant.nutritionFile());
-        nutritionLists.add(nutrition);
-
+        Nutrition nutrition = restaurant.nutrition();
 
         panel.add(cafeteriaMenu(restaurant, menu));
         panel.add(menuNutritions(nutrition, menu));

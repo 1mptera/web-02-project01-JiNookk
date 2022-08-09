@@ -1,6 +1,8 @@
 package utils;
 
+import models.Menu;
 import models.Nutrition;
+import models.Restaurant;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,75 +15,104 @@ class SortTest {
     void sortNoNutrition() {
         Sort sort = new Sort();
 
-        List<Nutrition> sortedNutritions = sort.sortNutritions(List.of(), "단백질");
+        List<Restaurant> sortedRestaurants = sort.sortRestaurants(List.of(), "단백질");
 
-        assertEquals(List.of(), sortedNutritions);
+        assertEquals(List.of(), sortedRestaurants);
     }
 
     @Test
     void sortOneNutrition() {
         Sort sort = new Sort();
 
-        Nutrition nutrition = new Nutrition(0, 0, 1, 0, 0, 0, "금정회관");
+        Restaurant restaurant = new Restaurant("금정회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 15, 0, 0, 0),
+                3500);
 
-        List<Nutrition> nutritions = new ArrayList<>();
-        nutritions.add(nutrition);
+        List<Restaurant> restaurants = new ArrayList<>();
+        restaurants.add(restaurant);
 
-        List<Nutrition> sortedNutritions =
-                sort.sortNutritions(nutritions, "단백질");
+        List<Restaurant> sortedRestaurants =
+                sort.sortRestaurants(restaurants, "단백질");
 
-        assertEquals(List.of(nutrition), sortedNutritions);
+        assertEquals(List.of(restaurant), sortedRestaurants);
     }
 
     @Test
     void index() {
-        List<Nutrition> nutritions = List.of(
-                new Nutrition(0, 0, 11, 0, 0, 0, "금정회관"),
-                new Nutrition(0, 0, 12, 0, 0, 0, "학생회관"),
-                new Nutrition(0, 0, 13, 0, 0, 0, "교직원식당")
+        Restaurant studentHall = new Restaurant(
+                "학생회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 13, 0, 0, 0),
+                5500
         );
 
-        Nutrition maximum = new Nutrition(0, 0, 13, 0, 0, 0, "교직원식당");
+        Restaurant staffCafeteria = new Restaurant(
+                "교직원식당",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 12, 0, 0, 0),
+                5500);
 
-        int index = nutritions.indexOf(maximum);
+        Restaurant geumjeong = new Restaurant(
+                "금정회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 15, 0, 0, 0),
+                3500);
+
+
+        List<Restaurant> restaurants = List.of(studentHall,staffCafeteria,geumjeong);
+
+        Restaurant maximum = new Restaurant("금정회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 15, 0, 0, 0),
+                3500);
+
+        int index = restaurants.indexOf(maximum);
         assertEquals(2, index);
     }
 
     @Test
-    void sortNutritions() {
+    void sortRestaurants() {
         Sort sort = new Sort();
 
-        List<Nutrition> nutritions = new ArrayList<>();
-        nutritions.add(new Nutrition(0, 0, 11, 0, 0, 0, "금정회관"));
-        nutritions.add(new Nutrition(0, 0, 12, 0, 0, 0, "학생회관"));
-        nutritions.add(new Nutrition(0, 0, 13, 0, 0, 0, "교직원식당"));
-        nutritions.add(new Nutrition(0, 0, 14, 0, 0, 0, "금정회관"));
-        nutritions.add(new Nutrition(0, 0, 15, 0, 0, 0, "학생회관"));
-        nutritions.add(new Nutrition(0, 0, 16, 0, 0, 0, "교직원식당"));
-
-
-        List<Nutrition> sorted = List.of(
-                new Nutrition(0, 0, 16, 0, 0, 0, "교직원식당"),
-                new Nutrition(0, 0, 15, 0, 0, 0, "학생회관"),
-                new Nutrition(0, 0, 14, 0, 0, 0, "금정회관"),
-                new Nutrition(0, 0, 13, 0, 0, 0, "교직원식당"),
-                new Nutrition(0, 0, 12, 0, 0, 0, "학생회관"),
-                new Nutrition(0, 0, 11, 0, 0, 0, "금정회관")
+        List<Restaurant> restaurants = new ArrayList<>();
+        Restaurant studentHall = new Restaurant(
+                "학생회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 13, 0, 0, 0),
+                5500
         );
+        restaurants.add(studentHall);
 
-        List<Nutrition> sortedNutritions =
-                sort.sortNutritions(nutritions, "단백질");
+        Restaurant staffCafeteria = new Restaurant(
+                "교직원식당",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 12, 0, 0, 0),
+                5500);
+        restaurants.add(staffCafeteria);
 
-        assertEquals(sorted, sortedNutritions);
+        Restaurant geumjeong = new Restaurant(
+                "금정회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 15, 0, 0, 0),
+                3500);
+        restaurants.add(geumjeong);
+
+        List<Restaurant> sorted = List.of(geumjeong, studentHall, staffCafeteria);
+
+        List<Restaurant> sortedRestaurants =
+                sort.sortRestaurants(restaurants, Nutrition.PROTEIN);
+
+        assertEquals(sorted, sortedRestaurants);
     }
 
     @Test
     void getList() {
         Sort sort = new Sort();
 
-        List<Nutrition> nutritionLists = List.of();
+        List<Restaurant> restaurants = List.of();
 
-        List<String> restaurantNames = sort.getList(nutritionLists);
+        List<String> restaurantNames = sort.getList(restaurants);
 
         assertEquals(List.of(), restaurantNames);
     }
@@ -90,8 +121,13 @@ class SortTest {
     void getOneList() {
         Sort sort = new Sort();
 
-        List<Nutrition> nutritionLists = List.of(
-                new Nutrition(0, 0, 0, 0, 0, 0, "금정회관")
+        List<Restaurant> nutritionLists = List.of(
+                new Restaurant(
+                        "금정회관",
+                        new Menu("", "", "", "", "", ""),
+                        new Nutrition(0, 0, 15, 0, 0, 0),
+                        3500
+                )
         );
 
         List<String> restaurantNames = sort.getList(nutritionLists);
@@ -103,15 +139,24 @@ class SortTest {
     void getLists() {
         Sort sort = new Sort();
 
-        List<Nutrition> nutritionLists = List.of(
-                new Nutrition(0, 0, 0, 0, 0, 0, "금정회관"),
-                new Nutrition(0, 0, 0, 0, 0, 0, "학생회관"),
-                new Nutrition(0, 0, 0, 0, 0, 0, "교직원회관")
+        List<Restaurant> nutritionLists = List.of(
+                new Restaurant("학생회관",
+                        new Menu("", "", "", "", "", ""),
+                        new Nutrition(0, 0, 13, 0, 0, 0),
+                        5500),
+                new Restaurant("교직원식당",
+                        new Menu("", "", "", "", "", ""),
+                        new Nutrition(0, 0, 12, 0, 0, 0),
+                        5500),
+                new Restaurant("금정회관",
+                        new Menu("", "", "", "", "", ""),
+                        new Nutrition(0, 0, 15, 0, 0, 0),
+                        3500)
         );
 
         List<String> restaurantNames = sort.getList(nutritionLists);
 
-        assertEquals(List.of("금정회관", "학생회관", "교직원회관"), restaurantNames);
+        assertEquals(List.of("학생회관", "교직원식당", "금정회관"), restaurantNames);
     }
 
 
@@ -119,9 +164,9 @@ class SortTest {
     void sortNoProteinList() {
         Sort sort = new Sort();
 
-        List<Nutrition> nutritions = List.of();
+        List<Restaurant> restaurants = List.of();
 
-        String[] sortedByprotein = sort.sortByProtein(nutritions, "단백질");
+        String[] sortedByprotein = sort.sortByNutrition(restaurants, "단백질");
 
         assertArrayEquals(new String[]{}, sortedByprotein);
     }
@@ -130,25 +175,37 @@ class SortTest {
     void sortOneProteinList() {
         Sort sort = new Sort();
 
-        List<Nutrition> nutritions = new ArrayList<>();
-        nutritions.add(new Nutrition(0, 0, 0, 0, 0, 0, "금정"));
+        List<Restaurant> restaurants = new ArrayList<>();
+        restaurants.add(new Restaurant("금정회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 15, 0, 0, 0),
+                3500));
 
-        String[] sortedByprotein = sort.sortByProtein(nutritions, "단백질");
+        String[] sortedByprotein = sort.sortByNutrition(restaurants, "단백질");
 
-        assertArrayEquals(new String[]{"금정"}, sortedByprotein);
+        assertArrayEquals(new String[]{"금정회관"}, sortedByprotein);
     }
 
     @Test
     void sortProteinLists() {
         Sort sort = new Sort();
 
-        List<Nutrition> nutritions = new ArrayList<>();
-        nutritions.add(new Nutrition(0, 0, 14, 0, 0, 0, "금정회관"));
-        nutritions.add(new Nutrition(0, 0, 13, 0, 0, 0, "학생회관"));
-        nutritions.add(new Nutrition(0, 0, 15, 0, 0, 0, "교직원식당"));
+        List<Restaurant> restaurants = new ArrayList<>();
+        restaurants.add(new Restaurant("금정회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 13, 0, 0, 0),
+                3500));
+        restaurants.add(new Restaurant("학생회관",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 12, 0, 0, 0),
+                5500));
+        restaurants.add(new Restaurant("교직원식당",
+                new Menu("", "", "", "", "", ""),
+                new Nutrition(0, 0, 15, 0, 0, 0),
+                5500));
 
 
-        String[] sortedByprotein = sort.sortByProtein(nutritions, "단백질");
+        String[] sortedByprotein = sort.sortByNutrition(restaurants, Nutrition.PROTEIN);
 
         assertArrayEquals(new String[]{"교직원식당", "금정회관", "학생회관"}, sortedByprotein);
     }
