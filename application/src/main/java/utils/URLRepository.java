@@ -13,7 +13,8 @@ public class URLRepository {
         }
 
         if (mainMenu.equals("생선가스")){
-            return "https://www.fatsecret.kr/%EC%B9%BC%EB%A1%9C%EB%A6%AC-%EC%98%81%EC%96%91%EC%86%8C/%EC%9D%BC%EB%B0%98%EB%AA%85/%EC%83%9D%EC%84%A0%EA%B9%8C%EC%8A%A4?portionid=5364371&portionamount=100.000";
+            return "https://www.fatsecret.kr/%EC%B9%BC%EB%A1%9C%EB%A6%AC-%EC%98%81%EC%96%91%EC%86%8C/%EC%9D%BC%EB%B" +
+                    "0%98%EB%AA%85/%EC%83%9D%EC%84%A0%EA%B9%8C%EC%8A%A4?portionid=5364371&portionamount=100.000";
         }
 
         return null;

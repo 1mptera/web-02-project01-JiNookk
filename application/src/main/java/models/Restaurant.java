@@ -22,18 +22,6 @@ public class Restaurant {
         this.foodPrice = foodPrice;
     }
 
-    public String[] categories() throws FileNotFoundException {
-
-
-        Scanner scanner = new Scanner(menuFile);
-
-        String line = scanner.nextLine();
-
-        String[] categories =line.split(",");
-
-        return categories;
-    }
-
     public String name() {
         return restaurantName;
     }
