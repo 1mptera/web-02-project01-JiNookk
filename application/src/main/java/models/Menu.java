@@ -38,9 +38,6 @@ public class Menu {
         return gimchi;
     }
 
-    public Nutrition findNutrition() {
-        return new Nutrition(10,0,15,16,5,252);
-    }
 
     @Override
     public boolean equals(Object other) {

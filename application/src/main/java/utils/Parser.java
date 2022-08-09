@@ -30,8 +30,10 @@ public class Parser {
 
         int[] categories = parseIntArray(line);
 
+        String cafeteriaName = line.split(",")[6];
+
         Nutrition nutrition = new Nutrition(categories[0], categories[1], categories[2],
-                categories[3], categories[4], categories[5]);
+                categories[3], categories[4], categories[5],cafeteriaName);
 
         return nutrition;
     }
@@ -41,7 +43,7 @@ public class Parser {
 
         int[] intArray = new int[words.length];
 
-        for (int i = 0 ; i < intArray.length ; i +=1){
+        for (int i = 0 ; i < intArray.length-1 ; i +=1){
             intArray[i] = Integer.parseInt(words[i]);
         }
 

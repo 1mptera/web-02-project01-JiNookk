@@ -1,7 +1,5 @@
 package models;
 
-import java.util.Objects;
-
 public class Nutrition {
 
     private int carbonHydrate;
@@ -10,10 +8,11 @@ public class Nutrition {
     private int fat;
     private int saturatedFat;
     private int calorie;
+    private String cafeteriaName;
 
     public Nutrition(int carbonHydrate, int sugar,
                      int protein, int fat,
-                     int saturatedFat, int calorie) {
+                     int saturatedFat, int calorie, String cafeteriaName) {
 
         this.carbonHydrate = carbonHydrate;
         this.sugar = sugar;
@@ -21,6 +20,7 @@ public class Nutrition {
         this.fat = fat;
         this.saturatedFat = saturatedFat;
         this.calorie = calorie;
+        this.cafeteriaName = cafeteriaName;
     }
 
     public int carbonHydratePer100g() {
@@ -47,6 +47,10 @@ public class Nutrition {
         return calorie;
     }
 
+    public String restaurantName() {
+        return cafeteriaName;
+    }
+
     @Override
     public boolean equals(Object other) {
         Nutrition otherNutrition = (Nutrition) other;
@@ -61,6 +65,7 @@ public class Nutrition {
 
     @Override
     public String toString() {
-        return carbonHydrate + ", " + protein + ", " + sugar + ", " + fat + ", " + saturatedFat + ", " + calorie;
+        return "\n탄수화물: " + carbonHydrate + ", 당류: " + sugar + ", 단백질: " + protein + ", 지방: " + fat +
+                ", 포화지방: " + saturatedFat + ", 열량: " + calorie + ", 식당이름: " + cafeteriaName;
     }
 }

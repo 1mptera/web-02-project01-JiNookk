@@ -28,16 +28,16 @@ class ParserTest {
                 new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk" +
                         "/application/src/main/resources/nutritions/금정회관영양성분.csv"));
 
-        assertEquals(new Nutrition(10, 0, 15, 16, 5, 252), nutrition);
+        assertEquals(new Nutrition(10, 0, 15, 16, 5, 252, "금정회관"), nutrition);
     }
 
     @Test
     void parseIntArray() {
         Parser parser = new Parser();
 
-        int[] intArray = parser.parseIntArray("1,2,3");
+        int[] intArray = parser.parseIntArray("1,2,금정회관");
 
-        assertArrayEquals(new int[]{1, 2, 3}, intArray);
+        assertArrayEquals(new int[]{1, 2, 0}, intArray);
     }
 
 }

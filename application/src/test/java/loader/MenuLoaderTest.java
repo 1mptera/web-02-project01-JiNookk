@@ -16,8 +16,6 @@ class MenuLoaderTest {
 
     @Test
     void parseOneString() {
-
-
         String line = "백미밥";
 
         String[] parsedStringArray = line.split(",");
