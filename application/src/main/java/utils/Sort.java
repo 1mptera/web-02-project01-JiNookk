@@ -1,53 +1,61 @@
 package utils;
 
+import models.Menu;
 import models.Nutrition;
+import models.Restaurant;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sort {
-    public String[] sortByProtein(List<Nutrition> nutritions, String nutrition) {
-        List<Nutrition> nutritionLists = sortNutritions(nutritions, nutrition);
+    public String[] sortByNutrition(List<Restaurant> restaurants, String nutrition) {
+        List<Restaurant> restaurantLists = sortRestaurants(restaurants, nutrition);
 
-        List<String> list = getList(nutritionLists);
+        List<String> list = getList(restaurantLists);
 
         String[] sortedArray = list.toArray(new String[list.size()]);
 
         return sortedArray;
     }
 
-    public List<Nutrition> sortNutritions(List<Nutrition> nutritions, String nutrition) {
-        List<Nutrition> sortedNutritions = new ArrayList<>();
+    public List<Restaurant> sortRestaurants(List<Restaurant> restaurants, String nutrition) {
+        List<Restaurant> sortedRestaurants = new ArrayList<>();
 
-        int nutritionSize = nutritions.size();
+        int nutritionSize = restaurants.size();
 
         for (int i = 0; i < nutritionSize; i += 1) {
             int index = 0;
-            Nutrition maximum = new Nutrition(0, 0, 0, 0, 0, 0, "");
-            for (int j = 0; j < nutritions.size(); j += 1) {
+
+            Restaurant maximum = new Restaurant("",
+                    new Menu("","","","","",""),
+                    new Nutrition(0,0,0,0,0,0),0);
+
+            for (int j = 0; j < restaurants.size(); j += 1) {
                 boolean nutritionCompare = switch (nutrition){
-                    case "단백질" -> nutritions.get(0).protein() <= nutritions.get(j).protein();
-                    case "칼로리" -> nutritions.get(0).calories() <= nutritions.get(j).calories();
-                    case "포화지방" -> nutritions.get(0).saturatedFat() <= nutritions.get(j).saturatedFat();
+                    case "단백질" -> restaurants.get(0).nutrition().protein() <= restaurants.get(j).nutrition().protein();
+                    case "칼로리" -> restaurants.get(0).nutrition().calories() <= restaurants.get(j).nutrition().calories();
+                    case "포화지방" -> restaurants.get(0).nutrition().saturatedFat() <= restaurants.get(j).nutrition().saturatedFat();
                     default -> false;
                 };
+
                 if (nutritionCompare) {
-                    maximum = nutritions.get(j);
+                    maximum = restaurants.get(j);
                     index = j;
                 }
             }
-            nutritions.remove(nutritions.get(index));
-            sortedNutritions.add(maximum);
+
+            restaurants.remove(restaurants.get(index));
+            sortedRestaurants.add(maximum);
         }
 
-        return sortedNutritions;
+        return sortedRestaurants;
     }
 
-    public List<String> getList(List<Nutrition> nutritionLists) {
+    public List<String> getList(List<Restaurant> restaurants) {
         List<String> stringList = new ArrayList<>();
 
-        for (Nutrition nutrition : nutritionLists) {
-            stringList.add(nutrition.cafeteriaName());
+        for (Restaurant restaurant : restaurants) {
+            stringList.add(restaurant.name());
         }
 
         return stringList;

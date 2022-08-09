@@ -55,7 +55,7 @@ public class Menu {
 
     @Override
     public String toString() {
-        return rice + ", " + mainMenu + ", " + sideMenu + ", " + soup + ", " + gimchi;
+        return rice + ", " + mainMenu + ", " + sideMenu + ", " + soup + ", " + gimchi + ", " + date;
     }
 
     public String date() {

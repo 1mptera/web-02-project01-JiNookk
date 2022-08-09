@@ -12,11 +12,10 @@ public class Nutrition {
     private int fat;
     private int saturatedFat;
     private int calorie;
-    private String cafeteriaName;
 
     public Nutrition(int carbonHydrate, int sugar,
                      int protein, int fat,
-                     int saturatedFat, int calorie, String cafeteriaName) {
+                     int saturatedFat, int calorie) {
 
         this.carbonHydrate = carbonHydrate;
         this.sugar = sugar;
@@ -24,7 +23,6 @@ public class Nutrition {
         this.fat = fat;
         this.saturatedFat = saturatedFat;
         this.calorie = calorie;
-        this.cafeteriaName = cafeteriaName;
     }
 
     public int carbonHydrate() {
@@ -51,9 +49,6 @@ public class Nutrition {
         return calorie;
     }
 
-    public String cafeteriaName() {
-        return cafeteriaName;
-    }
 
     @Override
     public boolean equals(Object other) {
@@ -70,6 +65,6 @@ public class Nutrition {
     @Override
     public String toString() {
         return "\n탄수화물: " + carbonHydrate + ", 당류: " + sugar + ", 단백질: " + protein + ", 지방: " + fat +
-                ", 포화지방: " + saturatedFat + ", 열량: " + calorie + ", 식당이름: " + cafeteriaName;
+                ", 포화지방: " + saturatedFat + ", 열량: " + calorie;
     }
 }

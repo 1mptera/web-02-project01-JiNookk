@@ -12,14 +12,14 @@ public class Restaurant {
     public static final String STAFFCAFETERIA = "교직원식당";
 
     private String restaurantName;
-    private File menuFile;
-    private File nutritionFile;
+    private Menu menu;
+    private Nutrition nutrition;
     private int foodPrice;
 
-    public Restaurant(String restaurantName, File menuFile, File nutritionFile, int foodPrice) {
+    public Restaurant(String restaurantName, Menu menu, Nutrition nutrition, int foodPrice) {
         this.restaurantName = restaurantName;
-        this.menuFile = menuFile;
-        this.nutritionFile = nutritionFile;
+        this.menu = menu;
+        this.nutrition = nutrition;
         this.foodPrice = foodPrice;
     }
 
@@ -31,11 +31,27 @@ public class Restaurant {
         return foodPrice;
     }
 
-    public File menuFile() {
-        return menuFile;
+    public Menu menu() {
+        return menu;
     }
 
-    public File nutritionFile() {
-        return nutritionFile;
+    public Nutrition nutrition() {
+        return nutrition;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        Restaurant otherRestaurant = (Restaurant) other;
+
+        return this.restaurantName.equals(otherRestaurant.restaurantName)
+                && this.menu.toString().equals(otherRestaurant.menu.toString())
+                && this.nutrition.toString().equals(otherRestaurant.nutrition.toString())
+                && this.foodPrice == otherRestaurant.foodPrice;
+    }
+
+    @Override
+    public String toString() {
+        return restaurantName + ", " + menu + ", " + nutrition + ", " + foodPrice;
+    }
+
 }

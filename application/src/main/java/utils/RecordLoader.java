@@ -31,7 +31,7 @@ public class RecordLoader {
 
     private String toCsvRowNutrition(Nutrition nutrition) {
         return nutrition.carbonHydrate() + "," + nutrition.sugar() + "," + nutrition.protein() + ","
-                + nutrition.fat() + "," + nutrition.saturatedFat() + "," + nutrition.cafeteriaName();
+                + nutrition.fat() + "," + nutrition.saturatedFat();
     }
 
     private String toCsvRowMenu(Menu menu) {

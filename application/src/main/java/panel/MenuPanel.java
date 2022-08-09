@@ -76,9 +76,9 @@
 //
 //        JPanel panel = new JPanel();
 //
-//        Menu menu = parser.parseMenu(restaurant.menuFile());
+//        Menu menu = parser.loadMenu(restaurant.menuFile());
 //
-//        Nutrition nutrition = parser.parseNutrition(restaurant.nutritionFile());
+//        Nutrition nutrition = parser.loadNutrition(restaurant.nutritionFile());
 //
 //        panel.add(cafeteriaMenu(restaurant, menu));
 //        panel.add(menuNutritions(nutrition));
