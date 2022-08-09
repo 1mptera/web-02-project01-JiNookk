@@ -18,7 +18,7 @@ public class Parser {
 
         String[] categories = line.split(",");
 
-        Menu menu = new Menu(categories[0], categories[1], categories[2], categories[3], categories[4]);
+        Menu menu = new Menu(categories[0], categories[1], categories[2], categories[3], categories[4],categories[5]);
 
         return menu;
     }

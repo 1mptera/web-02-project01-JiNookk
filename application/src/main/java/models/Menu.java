@@ -9,13 +9,15 @@ public class Menu {
     private String sideMenu;
     private String soup;
     private String gimchi;
+    private String date;
 
-    public Menu(String rice, String mainMenu, String sideMenu, String soup, String gimchi) {
+    public Menu(String rice, String mainMenu, String sideMenu, String soup, String gimchi, String date) {
         this.rice = rice;
         this.mainMenu = mainMenu;
         this.sideMenu = sideMenu;
         this.soup = soup;
         this.gimchi = gimchi;
+        this.date = date;
     }
 
     public String rice() {
@@ -43,13 +45,20 @@ public class Menu {
     public boolean equals(Object other) {
         Menu otherMenu = (Menu) other;
 
-        return Objects.equals(this.rice, otherMenu.rice) && Objects.equals(this.mainMenu, otherMenu.mainMenu)
-                && Objects.equals(this.sideMenu, otherMenu.sideMenu) && Objects.equals(this.soup, otherMenu.soup)
-                && Objects.equals(this.gimchi, otherMenu.gimchi);
+        return Objects.equals(this.rice, otherMenu.rice)
+                && Objects.equals(this.mainMenu, otherMenu.mainMenu)
+                && Objects.equals(this.sideMenu, otherMenu.sideMenu)
+                && Objects.equals(this.soup, otherMenu.soup)
+                && Objects.equals(this.gimchi, otherMenu.gimchi)
+                && Objects.equals(this.date, otherMenu.date);
     }
 
     @Override
     public String toString() {
         return rice + ", " + mainMenu + ", " + sideMenu + ", " + soup + ", " + gimchi;
+    }
+
+    public String date() {
+        return date;
     }
 }
