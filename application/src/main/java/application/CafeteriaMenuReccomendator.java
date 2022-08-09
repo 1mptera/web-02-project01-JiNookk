@@ -6,6 +6,7 @@ package application;// 내가 원하는 것
 // 도메인 모델 : menu
 
 
+import frame.RecordFrame;
 import models.Menu;
 import models.Nutrition;
 import models.Restaurant;
@@ -34,6 +35,7 @@ public class CafeteriaMenuReccomendator {
     private List<Nutrition> nutritionLists;
     private Sort sort;
     private JPanel menuPanel;
+    private List<Menu> menus;
 
     public static void main(String[] args) {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -46,11 +48,13 @@ public class CafeteriaMenuReccomendator {
         parser = new Parser();
         sort = new Sort();
 
+        menus = new ArrayList<>();
         nutritionLists = new ArrayList<>();
 
         frame = new JFrame("학식메뉴 알리미");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 700);
+        frame.setLocationRelativeTo(null);
 
         initButtonPanel();
 
@@ -66,7 +70,7 @@ public class CafeteriaMenuReccomendator {
     }
 
     private void initMenuPanel() {
-        menuPanel = new JPanel();
+
     }
 
     private void initButtonPanel() {
@@ -78,7 +82,6 @@ public class CafeteriaMenuReccomendator {
         contentPanel = new JPanel();
 
         contentPanel.setLayout(new BorderLayout());
-
 
         frame.add(contentPanel);
     }
@@ -116,16 +119,29 @@ public class CafeteriaMenuReccomendator {
     private JPanel createMenuPanel() { // TODO : 홈 패널
         JPanel panel = new JPanel();
 
-        panel.add(todayMenus());
+        panel.add(todayMenuButton());
+        panel.add(recordMenuButton());
 
         return panel;
     }
 
-    private JButton todayMenus() {
+    private JButton recordMenuButton() {
+        JButton button = new JButton("오늘의 메뉴 기록하기");
+        button.addActionListener(e -> {
+            RecordFrame recordFrame = new RecordFrame(menus, nutritionLists);
+
+
+        });
+        return button;
+    }
+
+    private JButton todayMenuButton() {
         JButton button = new JButton("오늘의 메뉴 확인하기");
         button.addActionListener(e -> {
             try {
+                resetMenus();
                 resetNutritionList();
+
                 removeContainer(buttonPanel);
                 removeContainer(contentPanel);
 
@@ -139,7 +155,13 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
-    private JPanel menuOptionPanel() {
+    private void resetMenus() {
+        for (int i = 0; i < menus.size(); i += 1) {
+            menus.remove(menus.get(0));
+        }
+    }
+
+    private JPanel menuOptionPanel() {              //TODO : 정렬 버튼이 담긴 패널
         JPanel panel = new JPanel();
         panel.add(sortButton(Nutrition.PROTEIN));
         panel.add(sortButton(Nutrition.CALORIES));
@@ -200,6 +222,7 @@ public class CafeteriaMenuReccomendator {
             removeContainer(menuPanel);
             removeContainer(contentPanel);
 
+            resetMenus();
             resetNutritionList();
 
             buttonPanel.add(createMenuPanel());
@@ -215,9 +238,8 @@ public class CafeteriaMenuReccomendator {
         }
     }
 
-    private JPanel menuPanel() throws FileNotFoundException {
-
-
+    private JPanel menuPanel() throws FileNotFoundException {           // TODO : 메뉴와 영양성분이 배치되는 패널
+        menuPanel = new JPanel();
         menuPanel.setLayout(new GridLayout(1, 3));
         menuPanel.add(geumjeongPanel());
         menuPanel.add(studentHallMenuPanel());
@@ -261,6 +283,7 @@ public class CafeteriaMenuReccomendator {
         JPanel panel = new JPanel();
 
         Menu menu = parser.parseMenu(restaurant.menuFile());
+        menus.add(menu);
 
         Nutrition nutrition = parser.parseNutrition(restaurant.nutritionFile());
         nutritionLists.add(nutrition);
@@ -300,12 +323,12 @@ public class CafeteriaMenuReccomendator {
         panel.setBackground(Color.YELLOW);
 
         panel.add(new JLabel("메인 메뉴 영양성분 (100g당)"));
-        panel.add(new JLabel("탄수화물: " + nutrition.carbonHydratePer100g()));
-        panel.add(new JLabel("당: " + nutrition.sugarPer100g()));
-        panel.add(new JLabel("단백질: " + nutrition.proteinPer100g()));
-        panel.add(new JLabel("지방: " + nutrition.fatPer100g()));
-        panel.add(new JLabel("포화지방: " + nutrition.saturatedFatPer100g()));
-        panel.add(new JLabel("열량: " + nutrition.caloriesPer100g()));
+        panel.add(new JLabel("탄수화물: " + nutrition.carbonHydrate()));
+        panel.add(new JLabel("당: " + nutrition.sugar()));
+        panel.add(new JLabel("단백질: " + nutrition.protein()));
+        panel.add(new JLabel("지방: " + nutrition.fat()));
+        panel.add(new JLabel("포화지방: " + nutrition.saturatedFat()));
+        panel.add(new JLabel("열량: " + nutrition.calories()));
 
         panel.add(informationUrlButton(menu));
 

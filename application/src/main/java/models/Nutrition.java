@@ -27,31 +27,31 @@ public class Nutrition {
         this.cafeteriaName = cafeteriaName;
     }
 
-    public int carbonHydratePer100g() {
+    public int carbonHydrate() {
         return carbonHydrate;
     }
 
-    public int sugarPer100g() {
+    public int sugar() {
         return sugar;
     }
 
-    public int proteinPer100g() {
+    public int protein() {
         return protein;
     }
 
-    public int fatPer100g() {
+    public int fat() {
         return fat;
     }
 
-    public int saturatedFatPer100g() {
+    public int saturatedFat() {
         return saturatedFat;
     }
 
-    public int caloriesPer100g() {
+    public int calories() {
         return calorie;
     }
 
-    public String restaurantName() {
+    public String cafeteriaName() {
         return cafeteriaName;
     }
 

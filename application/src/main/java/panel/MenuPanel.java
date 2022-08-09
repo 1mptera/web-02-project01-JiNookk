@@ -108,12 +108,12 @@
 //        panel.setLayout(new GridLayout(7, 1,10,30));
 //
 //        panel.add(new JLabel("메인 메뉴 영양성분 (100g당)"));
-//        panel.add(new JLabel("탄수화물: " + nutrition.carbonHydratePer100g()));
-//        panel.add(new JLabel("당: " + nutrition.sugarPer100g()));
-//        panel.add(new JLabel("단백질: " + nutrition.proteinPer100g()));
-//        panel.add(new JLabel("지방: " + nutrition.fatPer100g()));
-//        panel.add(new JLabel("포화지방: " + nutrition.saturatedFatPer100g()));
-//        panel.add(new JLabel("열량: " + nutrition.caloriesPer100g()));
+//        panel.add(new JLabel("탄수화물: " + nutrition.carbonHydrate()));
+//        panel.add(new JLabel("당: " + nutrition.sugar()));
+//        panel.add(new JLabel("단백질: " + nutrition.protein()));
+//        panel.add(new JLabel("지방: " + nutrition.fat()));
+//        panel.add(new JLabel("포화지방: " + nutrition.saturatedFat()));
+//        panel.add(new JLabel("열량: " + nutrition.calories()));
 //
 //        return panel;
 //    }

@@ -26,9 +26,9 @@ public class Sort {
             Nutrition maximum = new Nutrition(0, 0, 0, 0, 0, 0, "");
             for (int j = 0; j < nutritions.size(); j += 1) {
                 boolean nutritionCompare = switch (nutrition){
-                    case "단백질" -> nutritions.get(0).proteinPer100g() <= nutritions.get(j).proteinPer100g();
-                    case "칼로리" -> nutritions.get(0).caloriesPer100g() <= nutritions.get(j).caloriesPer100g();
-                    case "포화지방" -> nutritions.get(0).saturatedFatPer100g() <= nutritions.get(j).saturatedFatPer100g();
+                    case "단백질" -> nutritions.get(0).protein() <= nutritions.get(j).protein();
+                    case "칼로리" -> nutritions.get(0).calories() <= nutritions.get(j).calories();
+                    case "포화지방" -> nutritions.get(0).saturatedFat() <= nutritions.get(j).saturatedFat();
                     default -> false;
                 };
                 if (nutritionCompare) {
@@ -47,7 +47,7 @@ public class Sort {
         List<String> stringList = new ArrayList<>();
 
         for (Nutrition nutrition : nutritionLists) {
-            stringList.add(nutrition.restaurantName());
+            stringList.add(nutrition.cafeteriaName());
         }
 
         return stringList;
