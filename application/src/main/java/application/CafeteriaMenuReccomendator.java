@@ -56,11 +56,17 @@ public class CafeteriaMenuReccomendator {
 
         initContentPanel();
 
+        initMenuPanel();
+
         buttonPanel.add(createTitleLabel());
 
         contentPanel.add(createStartButton());
 
         frame.setVisible(true);
+    }
+
+    private void initMenuPanel() {
+        menuPanel = new JPanel();
     }
 
     private void initButtonPanel() {
@@ -119,7 +125,9 @@ public class CafeteriaMenuReccomendator {
         JButton button = new JButton("오늘의 메뉴 확인하기");
         button.addActionListener(e -> {
             try {
+                resetNutritionList();
                 removeContainer(buttonPanel);
+                removeContainer(contentPanel);
 
                 buttonPanel.add(menuOptionPanel());
 
@@ -143,7 +151,10 @@ public class CafeteriaMenuReccomendator {
         button.addActionListener(e -> {
             String[] panelsOrderByProtein = sort.sortByProtein(nutritionLists);
 
+            removeContainer(contentPanel);
             removeContainer(menuPanel);
+
+            contentPanel.add(menuPanel);
 
             for (String panelOrderByProtein : panelsOrderByProtein){
                 if (panelOrderByProtein.equals("금정회관")){
@@ -177,6 +188,9 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
+//  메인메뉴 보기 -> 단백질 정렬 -> 돌아가기
+//  -> 메인메뉴 보기 -> 단백질 정렬 : 뷰 2개
+
     private JButton backToMenuButton() {
         JButton button = new JButton("돌아가기");
         button.addActionListener(e -> {
@@ -184,9 +198,7 @@ public class CafeteriaMenuReccomendator {
             removeContainer(menuPanel);
             removeContainer(contentPanel);
 
-            for (int i = 0; i < nutritionLists.size(); i += 1) {
-                nutritionLists.remove(nutritionLists.get(0));
-            }
+            resetNutritionList();
 
             buttonPanel.add(createMenuPanel());
 
@@ -195,8 +207,14 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
+    private void resetNutritionList() {
+        for (int i = 0; i < nutritionLists.size(); i += 1) {
+            nutritionLists.remove(nutritionLists.get(0));
+        }
+    }
+
     private JPanel menuPanel() throws FileNotFoundException {
-        menuPanel = new JPanel();
+
 
         menuPanel.setLayout(new GridLayout(1, 3));
         menuPanel.add(geumjeongPanel());
