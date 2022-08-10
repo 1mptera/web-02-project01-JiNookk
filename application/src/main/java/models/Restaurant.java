@@ -40,7 +40,7 @@ public class Restaurant {
         return nutritions;
     }
 
-    public Menu selectMenu(SystemStatus systemStatus) {
+    public Menu selectMenu() {
         systemStatus.initIndex(menus);
 
         Menu selectedMenu = menus.get(this.systemStatus.index());
@@ -55,10 +55,12 @@ public class Restaurant {
 
         return selectedNutrition;
     }
-    // date 설정 -> menuPanel() -> add(geumjeongPanel())
+
+    // 달력에서 date 설정 -> menuPanel() -> add(geumjeongPanel())
     // -> menus, nutritions파일에서 읽어옴(식당별로) -> Restaurant geumjeong생성
     // -> cafeteriaPanel(geumjeong) -> menu -> restaurant.selectMenu
-    // -> initIndex(menus)
+    // -> initIndex(menus) -> menus의 menu의date와 시스템의 date가 같은지 비교
+    // -> 인덱스 반환
 
     @Override
     public boolean equals(Object other) {

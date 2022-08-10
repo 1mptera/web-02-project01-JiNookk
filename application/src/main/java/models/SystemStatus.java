@@ -6,10 +6,9 @@ import java.util.List;
 
 public class SystemStatus {
     private static String date = "";
-    private int index = 0;
+    private static int index = 0;
     
     public SystemStatus(){
-        today();
     }
 
     public void today() {
