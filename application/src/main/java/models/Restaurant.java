@@ -56,6 +56,10 @@ public class Restaurant {
         return selectedNutrition;
     }
 
+    public Menu getCheckedMenu(){
+        return null;
+    }
+
     // 달력에서 date 설정 -> menuPanel() -> add(geumjeongPanel())
     // -> menus, nutritions파일에서 읽어옴(식당별로) -> Restaurant geumjeong생성
     // -> cafeteriaPanel(geumjeong) -> menu -> restaurant.selectMenu

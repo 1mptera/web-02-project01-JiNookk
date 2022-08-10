@@ -7,13 +7,12 @@ package application;// 내가 원하는 것
 
 
 import frame.DatePicker;
-import frame.RecordFrame;
 import models.Menu;
 import models.Nutrition;
 import models.Restaurant;
-//import panel.MenuPanel;
 import models.SystemStatus;
 import utils.Loader;
+import utils.RecordLoader;
 import utils.Sort;
 import utils.URLRepository;
 
@@ -35,6 +34,7 @@ public class CafeteriaMenuReccomendator {
     private static JPanel contentPanel;
     private static JPanel buttonPanel;
     private static JPanel menuPanel;
+    private final RecordLoader recordLoader = new RecordLoader();
     private SystemStatus systemStatus;
 
     private Loader loader;
@@ -42,6 +42,9 @@ public class CafeteriaMenuReccomendator {
     private Sort sort;
 
     private static List<Restaurant> restaurants;
+    private List<Restaurant> todayRestaurants;
+    private JFrame recordFrame;
+    private JFrame alertFrame;
 
     public static void main(String[] args) {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -54,15 +57,15 @@ public class CafeteriaMenuReccomendator {
     }
 
     public void run() {
-        systemStatus = new SystemStatus();
-
-        systemStatus.today();
-
         urlRepository = new URLRepository();
         loader = new Loader();
         sort = new Sort();
+        systemStatus = new SystemStatus();
+        systemStatus.today();
 
         restaurants = new ArrayList<>();
+        todayRestaurants = new ArrayList<>();
+
 
         frame = new JFrame("학식메뉴 알리미");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -138,14 +141,186 @@ public class CafeteriaMenuReccomendator {
         return panel;
     }
 
+    //
+    //
+    //
+    //
+    //
+    //
+
     public JButton recordMenuButton() {
         JButton button = new JButton("오늘의 메뉴 기록하기");
         button.addActionListener(e -> {
-//            RecordFrame recordFrame = new RecordFrame(menus, nutritionLists);
+            if (todayRestaurants.size() == 0) {
+                initRecordFrame();
 
+                JPanel panel = new JPanel();
+                panel.add(new JLabel("오늘의 메뉴부터 확인해주세요!"));
+                JButton disposeButton = new JButton("확인");
+                disposeButton.addActionListener(dispose -> {
+                    recordFrame.dispose();
+                });
+                panel.add(disposeButton);
+                recordFrame.add(panel);
+
+                recordFrame.pack();
+                recordFrame.setVisible(true);
+            }
+            if (todayRestaurants.size() == 3) {
+                if (!systemStatus.isRecorded()) {
+                    initRecordFrame();
+
+                    recordFrame.add(CheckPanel());
+
+                    recordFrame.setVisible(true);
+                }
+
+                if (systemStatus.isRecorded()) {
+                    removeContainer(contentPanel);
+
+                    contentPanel.add(new JLabel("이미 기록하셨습니다!"));
+
+                    updateDisplay();
+                }
+            }
         });
         return button;
     }
+
+    private void initRecordFrame() {
+        recordFrame = new JFrame("기록하기");
+
+        recordFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        recordFrame.setSize(400, 300);
+        recordFrame.setLocationRelativeTo(null);
+    }
+
+    private JPanel CheckPanel() {
+        JPanel panel = new JPanel();
+
+        panel.setLayout(new BorderLayout());
+
+        panel.add(buttonPanel(), BorderLayout.NORTH);
+
+        panel.add(checkBoxContainer());
+
+        return panel;
+    }
+
+    private JPanel checkBoxContainer() {
+        JPanel panel = new JPanel();
+        panel.add(checkBoxPanel(Restaurant.GEUMJEONG));
+        panel.add(checkBoxPanel(Restaurant.STUDENTHALL));
+        panel.add(checkBoxPanel(Restaurant.STAFFCAFETERIA));
+        return panel;
+    }
+
+    private JPanel buttonPanel() {
+        JPanel panel = new JPanel();
+
+        panel.add(closeButton());
+
+        return panel;
+    }
+
+    //제출버튼 삭제!
+//                try {
+//                    recordLoader.saveMenu(.get(0));
+//                    recordLoader.saveNutrition(nutritions.get(0));
+//                } catch (IOException e) {
+//                    throw new RuntimeException(e);
+//                }
+
+
+    private JButton closeButton() {
+        JButton button = new JButton("돌아가기");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                recordFrame.dispose();
+            }
+        });
+        return button;
+    }
+
+    private JPanel checkBoxPanel(String cafeteria) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(1, 3));
+        panel.add(createCheckBox(cafeteria));
+        panel.add(new JLabel(cafeteria));
+        return panel;
+    }
+
+    private JCheckBox createCheckBox(String cafeteria) {
+        JCheckBox checkBox = new JCheckBox();
+
+        checkBox.addActionListener(e -> {
+            alertFrame = new JFrame("확인");
+            alertFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            alertFrame.setSize(300, 400);
+            alertFrame.setLocationRelativeTo(null);
+
+            alertFrame.add(confirmPanel(checkBox,cafeteria));
+
+            alertFrame.pack();
+            alertFrame.setVisible(true);
+        });
+
+        return checkBox;
+    }
+
+    private JPanel confirmPanel(JCheckBox checkBox, String cafeteria) {
+        JPanel panel = new JPanel();
+        JButton confirmButton = new JButton("네");
+        confirmButton.addActionListener(e -> {
+            // 여기에서 저장해야됨, 단 오늘의 메뉴
+
+            Menu checkedMenu = switch (cafeteria){
+                case "금정회관" -> todayRestaurants.get(0).menus().get(0);
+                case "학생회관" -> todayRestaurants.get(1).menus().get(0);
+                case "교직원식당" -> todayRestaurants.get(2).menus().get(0);
+                default -> null;
+            };
+
+            Nutrition nutrition = switch (cafeteria){
+                case "금정회관" -> todayRestaurants.get(0).nutritions().get(0);
+                case "학생회관" -> todayRestaurants.get(1).nutritions().get(0);
+                case "교직원식당" -> todayRestaurants.get(2).nutritions().get(0);
+                default -> null;
+            };
+
+            try {
+                recordLoader.saveMenu(checkedMenu);
+                recordLoader.saveNutrition(nutrition);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            systemStatus.initRecorded();
+            recordFrame.dispose();
+            alertFrame.dispose();
+
+        });
+        panel.add(confirmButton);
+
+        JButton cancelButton = new JButton("아니오");
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkBox.setSelected(false);
+
+                alertFrame.dispose();
+            }
+        });
+        panel.add(cancelButton);
+
+        return panel;
+    }
+
+    //
+    //
+    //
+    //
+
 
     public JButton todayMenuButton() {
         JButton button = new JButton("오늘의 메뉴 확인하기");
@@ -267,6 +442,7 @@ public class CafeteriaMenuReccomendator {
 
         return cafeteriaPanel(geumjeong);
     }
+
     public JPanel studentHallMenuPanel() throws FileNotFoundException {
         File menuFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
                 "application/src/main/resources/menus/학생회관.csv");
@@ -316,6 +492,17 @@ public class CafeteriaMenuReccomendator {
         // 언제 선언되지
 
         Nutrition nutrition = restaurant.selectNutrition();
+
+        if (systemStatus.todayMenuIndex() < 3) {
+            systemStatus.initTodayMenuIndex();
+
+            Restaurant todayRestaurant = new Restaurant(restaurant.name(),
+                    List.of(menu),
+                    List.of(nutrition),
+                    restaurant.price());
+
+            todayRestaurants.add(todayRestaurant);
+        }
 
         panel.add(cafeteriaMenu(restaurant, menu));
         panel.add(menuNutritions(nutrition, menu));
@@ -404,9 +591,9 @@ public class CafeteriaMenuReccomendator {
             JTextField text = new JTextField(20);
             panel.add(text);
 
-            panel.add(createDateButton(text,calendarFrame));
+            panel.add(createDateButton(text, calendarFrame));
 
-            panel.add(showMenusButton(text,calendarFrame));
+            panel.add(showMenusButton(text, calendarFrame));
 
             calendarFrame.getContentPane().add(panel);
 
@@ -417,7 +604,7 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
-    private JButton createDateButton(JTextField text,JFrame calendarFrame) {
+    private JButton createDateButton(JTextField text, JFrame calendarFrame) {
         JButton button = new JButton("날짜보기");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {

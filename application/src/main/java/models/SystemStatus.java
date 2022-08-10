@@ -7,7 +7,9 @@ import java.util.List;
 public class SystemStatus {
     private static String date = "";
     private static int index = 0;
-    
+    private boolean isRecorded = false;
+    private int todayMenuIndex = 0;
+
     public SystemStatus(){
     }
 
@@ -36,5 +38,21 @@ public class SystemStatus {
                 index = menus.indexOf(menu);
             }
         }
+    }
+
+    public void initRecorded() {
+        isRecorded = true;
+    }
+
+    public boolean isRecorded() {
+        return isRecorded;
+    }
+
+    public int todayMenuIndex() {
+        return todayMenuIndex;
+    }
+
+    public void initTodayMenuIndex() {
+        todayMenuIndex += 1;
     }
 }
