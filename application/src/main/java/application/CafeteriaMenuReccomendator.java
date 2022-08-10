@@ -222,9 +222,6 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
-//  메인메뉴 보기 -> 단백질 정렬 -> 돌아가기
-//  -> 메인메뉴 보기 -> 단백질 정렬 : 뷰 2개
-
     private JButton backToMenuButton() {
         JButton button = new JButton("돌아가기");
         button.addActionListener(e -> {
