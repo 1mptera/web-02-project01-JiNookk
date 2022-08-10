@@ -6,6 +6,7 @@ package application;// 내가 원하는 것
 // 도메인 모델 : menu
 
 
+import frame.CalendarFrame;
 import frame.RecordFrame;
 import models.Menu;
 import models.Nutrition;
@@ -163,11 +164,21 @@ public class CafeteriaMenuReccomendator {
 
     private JPanel menuOptionPanel() {              //TODO : 정렬 버튼이 담긴 패널
         JPanel panel = new JPanel();
+
+        panel.add(selectDateButton());
         panel.add(sortButton(Nutrition.PROTEIN));
         panel.add(sortButton(Nutrition.CALORIES));
         panel.add(sortButton(Nutrition.SATURATEDFAT));
         panel.add(backToMenuButton());
         return panel;
+    }
+
+    private JButton selectDateButton() {
+        JButton button = new JButton("날짜 선택");
+        button.addActionListener(e -> {
+            new CalendarFrame();
+        });
+        return button;
     }
 
     private JButton sortButton(String nutrition) {
