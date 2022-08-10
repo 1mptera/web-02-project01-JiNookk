@@ -54,7 +54,9 @@ public class CafeteriaMenuReccomendator {
     }
 
     public void run() {
-        systemStatus = new SystemStatus()
+        systemStatus = new SystemStatus();
+
+        systemStatus.today();
 
         urlRepository = new URLRepository();
         loader = new Loader();
@@ -238,8 +240,7 @@ public class CafeteriaMenuReccomendator {
 
     public JPanel menuPanel() throws FileNotFoundException {           // TODO : 메뉴와 영양성분이 배치되는 패널
         menuPanel = new JPanel();
-        menuPanel.setLayout(new GridLayout(1, 4));
-        menuPanel.add(new JLabel(systemStatus.date() + "일 메뉴"));
+        menuPanel.setLayout(new GridLayout(1, 3));
         menuPanel.add(geumjeongPanel());
         menuPanel.add(studentHallMenuPanel());
         menuPanel.add(staffCafeteriaMenuPanel());
@@ -293,6 +294,7 @@ public class CafeteriaMenuReccomendator {
                 "/application/src/main/resources/nutritions/교직원식당영양성분.csv");
 
         List<Menu> menus = loader.loadMenus(menuFile);
+        //데이터베이스를 읽어옴 -> 일주일치 메뉴가 저장
 
         List<Nutrition> nutritions = loader.loadNutritions(nutritionFile);
 
@@ -306,12 +308,17 @@ public class CafeteriaMenuReccomendator {
     public JPanel cafeteriaPanel(Restaurant restaurant) throws FileNotFoundException {
         JPanel panel = new JPanel();
 
-        Menu menu = restaurant.selectMenu(systemStatus);
+        Menu menu = restaurant.selectMenu();    // TODO : 메뉴를 처리하는 부분.
+        //이때 인덱스가 2니깐 10일게 나오겠지?
+        //왜 인덱스가 2일까
+        // today가 문제같은데
+        // 생성자로 계속 선언되고 초기화되니깐
+        // 언제 선언되지
 
         Nutrition nutrition = restaurant.selectNutrition();
 
         panel.add(cafeteriaMenu(restaurant, menu));
-//        panel.add(menuNutritions(nutrition, menu));
+        panel.add(menuNutritions(nutrition, menu));
 
         setBorder(contentPanel, 0, 0, 0, 0);
         updateDisplay();
@@ -425,15 +432,13 @@ public class CafeteriaMenuReccomendator {
         JButton button = new JButton("식단 보기");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String date = text.getText();
-
-
+                String date = text.getText(); // 정상동작
 
                 systemStatus.setDate(date);
 
-
                 removeContainer(contentPanel);
                 removeContainer(menuPanel);
+                resetRestaurants();
 
                 try {
                     contentPanel.add(menuPanel());

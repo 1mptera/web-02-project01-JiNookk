@@ -43,7 +43,7 @@ class RestaurantTest {
                 3500
         );
 
-        Menu menu = restaurant.selectMenu(status);
+        Menu menu = restaurant.selectMenu();
 
 //        assertNull(menu.date());
 //        assertNull(status.date());
@@ -90,7 +90,7 @@ class RestaurantTest {
 
         status.setDate("220810"); // textField의 getText로 받아올 것!
 
-        Menu menu = restaurant.selectMenu(status);
+        Menu menu = restaurant.selectMenu();
 
         Nutrition nutrition = restaurant.selectNutrition();
 
