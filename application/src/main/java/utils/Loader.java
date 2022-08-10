@@ -5,35 +5,48 @@ import models.Nutrition;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Loader {
 
     private Scanner scanner;
 
-    public Menu loadMenu(File file) throws FileNotFoundException {
+    public List<Menu> loadMenus(File file) throws FileNotFoundException {
+        List<Menu> menus = new ArrayList<>();
+
         scanner = new Scanner(file);
 
-        String line = scanner.nextLine();
+        while (scanner.hasNextLine()){
+            String line = scanner.nextLine();
 
-        String[] categories = line.split(",");
+            String[] categories = line.split(",");
 
-        Menu menu = new Menu(categories[0], categories[1], categories[2], categories[3], categories[4],categories[5]);
+            Menu menu = new Menu(categories[0], categories[1], categories[2], categories[3], categories[4],categories[5]);
 
-        return menu;
+            menus.add(menu);
+        }
+
+        return menus;
     }
 
-    public Nutrition loadNutrition(File nutritionFile) throws FileNotFoundException {
+    public List<Nutrition> loadNutritions(File nutritionFile) throws FileNotFoundException {
+        List<Nutrition> nutritions =  new ArrayList<>();
+
         scanner = new Scanner(nutritionFile);
 
-        String line = scanner.nextLine();
+        while (scanner.hasNextLine()) {
+            String line = scanner.nextLine();
 
-        int[] categories = parseIntArray(line);
+            int[] categories = parseIntArray(line);
 
-        Nutrition nutrition = new Nutrition(categories[0], categories[1], categories[2],
-                categories[3], categories[4], categories[5]);
+            Nutrition nutrition = new Nutrition(categories[0], categories[1], categories[2],
+                    categories[3], categories[4], categories[5]);
 
-        return nutrition;
+            nutritions.add(nutrition);
+        }
+        return nutritions;
     }
 
     public int[] parseIntArray(String line) {

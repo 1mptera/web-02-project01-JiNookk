@@ -4,22 +4,23 @@ package models;
 // 식당의 이름과 식당의 메뉴가 저장된 파일 경로 참조
 
 
-import java.io.File;
+import java.util.List;
 
 public class Restaurant {
     public static final String GEUMJEONG = "금정회관";
     public static final String STUDENTHALL = "학생회관";
     public static final String STAFFCAFETERIA = "교직원식당";
+    private final SystemStatus systemStatus = new SystemStatus();
 
     private String restaurantName;
-    private Menu menu;
-    private Nutrition nutrition;
+    private List<Menu> menus;
+    private List<Nutrition> nutritions;
     private int foodPrice;
 
-    public Restaurant(String restaurantName, Menu menu, Nutrition nutrition, int foodPrice) {
+    public Restaurant(String restaurantName, List<Menu> menus, List<Nutrition> nutritions, int foodPrice) {
         this.restaurantName = restaurantName;
-        this.menu = menu;
-        this.nutrition = nutrition;
+        this.menus = menus;
+        this.nutritions = nutritions;
         this.foodPrice = foodPrice;
     }
 
@@ -31,27 +32,46 @@ public class Restaurant {
         return foodPrice;
     }
 
-    public Menu menu() {
-        return menu;
+    public List<Menu> menus() {
+        return menus;
     }
 
-    public Nutrition nutrition() {
-        return nutrition;
+    public List<Nutrition> nutritions() {
+        return nutritions;
     }
+
+    public Menu selectMenu(SystemStatus systemStatus) {
+        systemStatus.initIndex(menus);
+
+        Menu selectedMenu = menus.get(this.systemStatus.index());
+
+        return selectedMenu;
+    }
+
+    public Nutrition selectNutrition() {
+        systemStatus.initIndex(menus);
+
+        Nutrition selectedNutrition = nutritions.get(systemStatus.index());
+
+        return selectedNutrition;
+    }
+    // date 설정 -> menuPanel() -> add(geumjeongPanel())
+    // -> menus, nutritions파일에서 읽어옴(식당별로) -> Restaurant geumjeong생성
+    // -> cafeteriaPanel(geumjeong) -> menu -> restaurant.selectMenu
+    // -> initIndex(menus)
 
     @Override
     public boolean equals(Object other) {
         Restaurant otherRestaurant = (Restaurant) other;
 
         return this.restaurantName.equals(otherRestaurant.restaurantName)
-                && this.menu.toString().equals(otherRestaurant.menu.toString())
-                && this.nutrition.toString().equals(otherRestaurant.nutrition.toString())
+                && this.menus.toString().equals(otherRestaurant.menus.toString())
+                && this.nutritions.toString().equals(otherRestaurant.nutritions.toString())
                 && this.foodPrice == otherRestaurant.foodPrice;
     }
 
     @Override
     public String toString() {
-        return restaurantName + ", " + menu + ", " + nutrition + ", " + foodPrice;
+        return restaurantName + ", " + menus + ", " + nutritions + ", " + foodPrice;
     }
-
 }
