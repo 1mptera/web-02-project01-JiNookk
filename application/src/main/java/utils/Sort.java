@@ -3,11 +3,37 @@ package utils;
 import models.Menu;
 import models.Nutrition;
 import models.Restaurant;
+import models.SystemStatus;
 
+import java.time.chrono.Chronology;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Sort {
+
+    public static void main(String[] args) {
+        SystemStatus systemStatus = new SystemStatus();
+
+        System.out.println(systemStatus.date());
+
+        SystemStatus s1 = new SystemStatus();
+
+        SystemStatus s2 = new SystemStatus();
+
+        SystemStatus s3 = new SystemStatus();
+
+        s1.setDate("1");
+        System.out.println(systemStatus.date());
+
+        s2.setDate("2");
+        System.out.println(systemStatus.date());
+
+        s3.setDate("3");
+        System.out.println(systemStatus.date());
+
+
+    }
+
     public String[] sortByNutrition(List<Restaurant> restaurants, String nutrition) {
         List<Restaurant> restaurantLists = sortRestaurants(restaurants, nutrition);
 
@@ -27,14 +53,17 @@ public class Sort {
             int index = 0;
 
             Restaurant maximum = new Restaurant("",
-                    new Menu("","","","","",""),
-                    new Nutrition(0,0,0,0,0,0),0);
+                    List.of(),
+                    List.of(),0);
 
             for (int j = 0; j < restaurants.size(); j += 1) {
                 boolean nutritionCompare = switch (nutrition){
-                    case "단백질" -> restaurants.get(0).nutrition().protein() <= restaurants.get(j).nutrition().protein();
-                    case "칼로리" -> restaurants.get(0).nutrition().calories() <= restaurants.get(j).nutrition().calories();
-                    case "포화지방" -> restaurants.get(0).nutrition().saturatedFat() <= restaurants.get(j).nutrition().saturatedFat();
+                    case "단백질" -> restaurants.get(0).selectNutrition().protein() <=
+                            restaurants.get(j).selectNutrition().protein();
+                    case "칼로리" -> restaurants.get(0).selectNutrition().calories() <=
+                            restaurants.get(j).selectNutrition().calories();
+                    case "포화지방" -> restaurants.get(0).selectNutrition().saturatedFat() <=
+                            restaurants.get(j).selectNutrition().saturatedFat();
                     default -> false;
                 };
 

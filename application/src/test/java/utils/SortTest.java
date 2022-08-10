@@ -25,8 +25,8 @@ class SortTest {
         Sort sort = new Sort();
 
         Restaurant restaurant = new Restaurant("금정회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 15, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                 3500);
 
         List<Restaurant> restaurants = new ArrayList<>();
@@ -42,29 +42,29 @@ class SortTest {
     void index() {
         Restaurant studentHall = new Restaurant(
                 "학생회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 13, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 13, 0, 0, 0)),
                 5500
         );
 
         Restaurant staffCafeteria = new Restaurant(
                 "교직원식당",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 12, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 12, 0, 0, 0)),
                 5500);
 
         Restaurant geumjeong = new Restaurant(
                 "금정회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 15, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                 3500);
 
 
         List<Restaurant> restaurants = List.of(studentHall,staffCafeteria,geumjeong);
 
         Restaurant maximum = new Restaurant("금정회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 15, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                 3500);
 
         int index = restaurants.indexOf(maximum);
@@ -78,23 +78,23 @@ class SortTest {
         List<Restaurant> restaurants = new ArrayList<>();
         Restaurant studentHall = new Restaurant(
                 "학생회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 13, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 13, 0, 0, 0)),
                 5500
         );
         restaurants.add(studentHall);
 
         Restaurant staffCafeteria = new Restaurant(
                 "교직원식당",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 12, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 12, 0, 0, 0)),
                 5500);
         restaurants.add(staffCafeteria);
 
         Restaurant geumjeong = new Restaurant(
                 "금정회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 15, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                 3500);
         restaurants.add(geumjeong);
 
@@ -124,8 +124,8 @@ class SortTest {
         List<Restaurant> nutritionLists = List.of(
                 new Restaurant(
                         "금정회관",
-                        new Menu("", "", "", "", "", ""),
-                        new Nutrition(0, 0, 15, 0, 0, 0),
+                        List.of(),
+                        List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                         3500
                 )
         );
@@ -141,16 +141,16 @@ class SortTest {
 
         List<Restaurant> nutritionLists = List.of(
                 new Restaurant("학생회관",
-                        new Menu("", "", "", "", "", ""),
-                        new Nutrition(0, 0, 13, 0, 0, 0),
+                        List.of(),
+                        List.of(new Nutrition(0, 0, 13, 0, 0, 0)),
                         5500),
                 new Restaurant("교직원식당",
-                        new Menu("", "", "", "", "", ""),
-                        new Nutrition(0, 0, 12, 0, 0, 0),
+                        List.of(),
+                        List.of(new Nutrition(0, 0, 12, 0, 0, 0)),
                         5500),
                 new Restaurant("금정회관",
-                        new Menu("", "", "", "", "", ""),
-                        new Nutrition(0, 0, 15, 0, 0, 0),
+                        List.of(),
+                        List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                         3500)
         );
 
@@ -177,8 +177,8 @@ class SortTest {
 
         List<Restaurant> restaurants = new ArrayList<>();
         restaurants.add(new Restaurant("금정회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 15, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                 3500));
 
         String[] sortedByprotein = sort.sortByNutrition(restaurants, "단백질");
@@ -192,16 +192,16 @@ class SortTest {
 
         List<Restaurant> restaurants = new ArrayList<>();
         restaurants.add(new Restaurant("금정회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 13, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 13, 0, 0, 0)),
                 3500));
         restaurants.add(new Restaurant("학생회관",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 12, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 12, 0, 0, 0)),
                 5500));
         restaurants.add(new Restaurant("교직원식당",
-                new Menu("", "", "", "", "", ""),
-                new Nutrition(0, 0, 15, 0, 0, 0),
+                List.of(),
+                List.of(new Nutrition(0, 0, 15, 0, 0, 0)),
                 5500));
 
 

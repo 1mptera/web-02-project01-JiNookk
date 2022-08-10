@@ -1,5 +1,8 @@
 package frame;
 
+import application.CafeteriaMenuReccomendator;
+import models.SystemStatus;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +11,7 @@ public class CalendarFrame{
 
     private final JTextField text;
     private final JFrame frame;
+    private final SystemStatus systemStatus = new SystemStatus();
 
     public static void main(String[] args) {
         CalendarFrame application = new CalendarFrame();
@@ -50,7 +54,12 @@ public class CalendarFrame{
         JButton button = new JButton("식단 보기");
         button.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //해당 날짜에 맞는 식단을 보여준다.
+                String date = text.getText();
+
+                systemStatus.setDate(date);
+                                                //TODO : 여기서 식단 업데이트
+                CafeteriaMenuReccomendator.frame();
+
                 frame.dispose();
             }
         });

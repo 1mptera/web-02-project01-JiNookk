@@ -6,18 +6,21 @@ package application;// 내가 원하는 것
 // 도메인 모델 : menu
 
 
-import frame.CalendarFrame;
+import frame.DatePicker;
 import frame.RecordFrame;
 import models.Menu;
 import models.Nutrition;
 import models.Restaurant;
 //import panel.MenuPanel;
+import models.SystemStatus;
 import utils.Loader;
 import utils.Sort;
 import utils.URLRepository;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,16 +31,17 @@ import java.util.List;
 
 public class CafeteriaMenuReccomendator {
 
-    private JFrame frame;
-    private JPanel contentPanel;
-    private JPanel buttonPanel;
+    private static JFrame frame;
+    private static JPanel contentPanel;
+    private static JPanel buttonPanel;
+    private static JPanel menuPanel;
+    private SystemStatus systemStatus;
+
     private Loader loader;
-    private URLRepository urlRepsitory;
-    private List<Nutrition> nutritionLists;
+    private URLRepository urlRepository;
     private Sort sort;
-    private JPanel menuPanel;
-    private List<Menu> menus;
-    private List<Restaurant> restaurants;
+
+    private static List<Restaurant> restaurants;
 
     public static void main(String[] args) {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -45,14 +49,18 @@ public class CafeteriaMenuReccomendator {
         application.run();
     }
 
-    private void run() {
-        urlRepsitory = new URLRepository();
+    public static JFrame frame() {
+        return frame;
+    }
+
+    public void run() {
+        systemStatus = new SystemStatus()
+
+        urlRepository = new URLRepository();
         loader = new Loader();
         sort = new Sort();
 
         restaurants = new ArrayList<>();
-        menus = new ArrayList<>();
-        nutritionLists = new ArrayList<>();
 
         frame = new JFrame("학식메뉴 알리미");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -72,16 +80,16 @@ public class CafeteriaMenuReccomendator {
         frame.setVisible(true);
     }
 
-    private void initMenuPanel() {
+    public void initMenuPanel() {
 
     }
 
-    private void initButtonPanel() {
+    public void initButtonPanel() {
         buttonPanel = new JPanel();
         frame.add(buttonPanel, BorderLayout.NORTH);
     }
 
-    private void initContentPanel() {
+    public void initContentPanel() {
         contentPanel = new JPanel();
 
         contentPanel.setLayout(new BorderLayout());
@@ -89,13 +97,13 @@ public class CafeteriaMenuReccomendator {
         frame.add(contentPanel);
     }
 
-    private JLabel createTitleLabel() {
+    public JLabel createTitleLabel() {
         JLabel label = new JLabel("학식메뉴 알리미");
         label.setHorizontalAlignment(JLabel.CENTER);
         return label;
     }
 
-    private JButton createStartButton() {
+    public JButton createStartButton() {
         JButton button = new JButton("시작하기!");
         setBorder(contentPanel, 300, 400, 300, 400);
         button.addActionListener(e -> {
@@ -119,7 +127,7 @@ public class CafeteriaMenuReccomendator {
         panel.removeAll();
     }
 
-    private JPanel createMenuPanel() { // TODO : 홈 패널
+    public JPanel createMenuPanel() { // TODO : 홈 패널
         JPanel panel = new JPanel();
 
         panel.add(todayMenuButton());
@@ -128,16 +136,16 @@ public class CafeteriaMenuReccomendator {
         return panel;
     }
 
-    private JButton recordMenuButton() {
+    public JButton recordMenuButton() {
         JButton button = new JButton("오늘의 메뉴 기록하기");
         button.addActionListener(e -> {
-            RecordFrame recordFrame = new RecordFrame(menus, nutritionLists);
+//            RecordFrame recordFrame = new RecordFrame(menus, nutritionLists);
 
         });
         return button;
     }
 
-    private JButton todayMenuButton() {
+    public JButton todayMenuButton() {
         JButton button = new JButton("오늘의 메뉴 확인하기");
         button.addActionListener(e -> {
             try {
@@ -156,13 +164,13 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
-    private void resetRestaurants() {
+    public void resetRestaurants() {
         for (int i = 0; i < restaurants.size(); i += 1) {
             restaurants.remove(restaurants.get(0));
         }
     }
 
-    private JPanel menuOptionPanel() {              //TODO : 정렬 버튼이 담긴 패널
+    public JPanel menuOptionPanel() {              //TODO : 정렬 버튼이 담긴 패널
         JPanel panel = new JPanel();
 
         panel.add(selectDateButton());
@@ -173,15 +181,7 @@ public class CafeteriaMenuReccomendator {
         return panel;
     }
 
-    private JButton selectDateButton() {
-        JButton button = new JButton("날짜 선택");
-        button.addActionListener(e -> {
-            new CalendarFrame();
-        });
-        return button;
-    }
-
-    private JButton sortButton(String nutrition) {
+    public JButton sortButton(String nutrition) {
         JButton button = new JButton(nutrition + " 정렬");
         button.addActionListener(e -> {
             String[] sortedCafeteriaNames = sort.sortByNutrition(restaurants, nutrition);
@@ -222,7 +222,7 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
-    private JButton backToMenuButton() {
+    public JButton backToMenuButton() {
         JButton button = new JButton("돌아가기");
         button.addActionListener(e -> {
             removeContainer(buttonPanel);
@@ -236,9 +236,10 @@ public class CafeteriaMenuReccomendator {
         return button;
     }
 
-    private JPanel menuPanel() throws FileNotFoundException {           // TODO : 메뉴와 영양성분이 배치되는 패널
+    public JPanel menuPanel() throws FileNotFoundException {           // TODO : 메뉴와 영양성분이 배치되는 패널
         menuPanel = new JPanel();
-        menuPanel.setLayout(new GridLayout(1, 3));
+        menuPanel.setLayout(new GridLayout(1, 4));
+        menuPanel.add(new JLabel(systemStatus.date() + "일 메뉴"));
         menuPanel.add(geumjeongPanel());
         menuPanel.add(studentHallMenuPanel());
         menuPanel.add(staffCafeteriaMenuPanel());
@@ -247,78 +248,77 @@ public class CafeteriaMenuReccomendator {
     }
 
     // 금정회관, 교직원식당, 학생회관
-    private JPanel geumjeongPanel() throws FileNotFoundException {
+
+    public JPanel geumjeongPanel() throws FileNotFoundException {
         File menuFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
                 "application/src/main/resources/menus/금정회관.csv");
 
         File nutritionFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk" +
                 "/application/src/main/resources/nutritions/금정회관영양성분.csv");
 
-        Menu menu = loader.loadMenu(menuFile);
+        List<Menu> menus = loader.loadMenus(menuFile);
 
-        Nutrition nutrition = loader.loadNutrition(nutritionFile);
+        List<Nutrition> nutritions = loader.loadNutritions(nutritionFile);
 
-        Restaurant geumjeong = new Restaurant("금정회관", menu, nutrition, 3500);
+        Restaurant geumjeong = new Restaurant("금정회관", menus, nutritions, 3500);
 
         restaurants.add(geumjeong);
 
         return cafeteriaPanel(geumjeong);
     }
-
-    private JPanel studentHallMenuPanel() throws FileNotFoundException {
+    public JPanel studentHallMenuPanel() throws FileNotFoundException {
         File menuFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
                 "application/src/main/resources/menus/학생회관.csv");
 
         File nutritionFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk" +
                 "/application/src/main/resources/nutritions/학생회관영양성분.csv");
-
-        Menu menu = loader.loadMenu(menuFile);
-
-
-        Nutrition nutrition = loader.loadNutrition(nutritionFile);
+        List<Menu> menus = loader.loadMenus(menuFile);
 
 
-        Restaurant studentHall = new Restaurant("학생회관", menu, nutrition, 5500);
+        List<Nutrition> nutritions = loader.loadNutritions(nutritionFile);
+
+
+        Restaurant studentHall = new Restaurant("학생회관", menus, nutritions, 5500);
 
         restaurants.add(studentHall);
 
         return cafeteriaPanel(studentHall);
     }
 
-    private JPanel staffCafeteriaMenuPanel() throws FileNotFoundException {
+    public JPanel staffCafeteriaMenuPanel() throws FileNotFoundException {
         File menuFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
                 "application/src/main/resources/menus/교직원식당.csv");
 
         File nutritionFile = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk" +
                 "/application/src/main/resources/nutritions/교직원식당영양성분.csv");
 
-        Menu menu = loader.loadMenu(menuFile);
+        List<Menu> menus = loader.loadMenus(menuFile);
 
-        Nutrition nutrition = loader.loadNutrition(nutritionFile);
+        List<Nutrition> nutritions = loader.loadNutritions(nutritionFile);
 
-        Restaurant staffCafeteria = new Restaurant("교직원식당", menu, nutrition, 5500);
+        Restaurant staffCafeteria = new Restaurant("교직원식당", menus, nutritions, 5500);
 
         restaurants.add(staffCafeteria);
 
         return cafeteriaPanel(staffCafeteria);
     }
 
-    private JPanel cafeteriaPanel(Restaurant restaurant) throws FileNotFoundException {
+    public JPanel cafeteriaPanel(Restaurant restaurant) throws FileNotFoundException {
         JPanel panel = new JPanel();
 
-        Menu menu = restaurant.menu();
+        Menu menu = restaurant.selectMenu(systemStatus);
 
-        Nutrition nutrition = restaurant.nutrition();
+        Nutrition nutrition = restaurant.selectNutrition();
 
         panel.add(cafeteriaMenu(restaurant, menu));
-        panel.add(menuNutritions(nutrition, menu));
+//        panel.add(menuNutritions(nutrition, menu));
 
         setBorder(contentPanel, 0, 0, 0, 0);
         updateDisplay();
         return panel;
     }
 
-    private JPanel cafeteriaMenu(Restaurant restaurant, Menu menu) throws FileNotFoundException {
+    public JPanel cafeteriaMenu(Restaurant restaurant, Menu menu) throws FileNotFoundException {
         JPanel panel = new JPanel();
         panel.setBackground(Color.cyan);
         panel.setLayout(new GridLayout(8, 1, 0, 30));
@@ -337,7 +337,7 @@ public class CafeteriaMenuReccomendator {
         return panel;
     }
 
-    private JPanel menuNutritions(Nutrition nutrition, Menu menu) {
+    public JPanel menuNutritions(Nutrition nutrition, Menu menu) {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(8, 1, 0, 30));
 
@@ -356,11 +356,11 @@ public class CafeteriaMenuReccomendator {
         return panel;
     }
 
-    private JButton informationUrlButton(Menu menu) {
+    public JButton informationUrlButton(Menu menu) {
         JButton button = new JButton("자세히");
         button.setForeground(Color.BLUE);
         button.addActionListener(e -> {
-            String url = urlRepsitory.url(menu.mainMenu());
+            String url = urlRepository.url(menu.mainMenu());
 
             try {
                 Desktop.getDesktop().browse(new URI(url));
@@ -382,5 +382,70 @@ public class CafeteriaMenuReccomendator {
         contentPanel.setVisible(false);
         contentPanel.setVisible(true);
         frame.setVisible(true);
+    }
+
+    public JButton selectDateButton() {
+        JButton button = new JButton("날짜 선택");
+        button.addActionListener(e -> {
+            JFrame calendarFrame = new JFrame("달력");
+
+            JPanel panel = new JPanel();
+
+            JLabel label = new JLabel("선택된 날짜");
+            panel.add(label);
+
+            JTextField text = new JTextField(20);
+            panel.add(text);
+
+            panel.add(createDateButton(text,calendarFrame));
+
+            panel.add(showMenusButton(text,calendarFrame));
+
+            calendarFrame.getContentPane().add(panel);
+
+            calendarFrame.pack();
+            calendarFrame.setLocationRelativeTo(null);
+            calendarFrame.setVisible(true);
+        });
+        return button;
+    }
+
+    private JButton createDateButton(JTextField text,JFrame calendarFrame) {
+        JButton button = new JButton("날짜보기");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+//                DatePicker datePicker = new DatePicker();
+                text.setText(new DatePicker(calendarFrame).setPickedDate());
+            }
+        });
+        return button;
+    }
+
+    private JButton showMenusButton(JTextField text, JFrame calendarFrame) {
+        JButton button = new JButton("식단 보기");
+        button.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String date = text.getText();
+
+
+
+                systemStatus.setDate(date);
+
+
+                removeContainer(contentPanel);
+                removeContainer(menuPanel);
+
+                try {
+                    contentPanel.add(menuPanel());
+                } catch (FileNotFoundException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                updateDisplay();
+
+                calendarFrame.dispose();
+            }
+        });
+        return button;
     }
 }
