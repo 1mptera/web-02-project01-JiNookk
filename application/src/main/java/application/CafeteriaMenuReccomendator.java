@@ -45,18 +45,30 @@ public class CafeteriaMenuReccomendator {
     private List<Restaurant> todayRestaurants;
     private JFrame recordFrame;
     private JFrame alertFrame;
+    private List<Menu> recordedMenus;
+    private List<Nutrition> recordedNutritions;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
 
         application.run();
     }
 
-    public static JFrame frame() {
-        return frame;
+    public void run() throws FileNotFoundException {
+        prepareObjects();
+
+        initMainFrame();
+
+        initButtonPanel();
+
+        initContentPanel();
+
+        initMenuPanel();
+
+        frame.setVisible(true);
     }
 
-    public void run() {
+    private void prepareObjects() throws FileNotFoundException {
         urlRepository = new URLRepository();
         loader = new Loader();
         sort = new Sort();
@@ -66,23 +78,17 @@ public class CafeteriaMenuReccomendator {
         restaurants = new ArrayList<>();
         todayRestaurants = new ArrayList<>();
 
+        recordedMenus = recordLoader.loadMenus();
+        systemStatus.isRecorded(recordedMenus);
 
+        recordedNutritions = recordLoader.loadNutritions();
+    }
+
+    private void initMainFrame() {
         frame = new JFrame("학식메뉴 알리미");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1200, 700);
         frame.setLocationRelativeTo(null);
-
-        initButtonPanel();
-
-        initContentPanel();
-
-        initMenuPanel();
-
-        buttonPanel.add(createTitleLabel());
-
-        contentPanel.add(createStartButton());
-
-        frame.setVisible(true);
     }
 
     public void initMenuPanel() {
@@ -91,6 +97,9 @@ public class CafeteriaMenuReccomendator {
 
     public void initButtonPanel() {
         buttonPanel = new JPanel();
+
+        buttonPanel.add(createTitleLabel());
+
         frame.add(buttonPanel, BorderLayout.NORTH);
     }
 
@@ -98,6 +107,8 @@ public class CafeteriaMenuReccomendator {
         contentPanel = new JPanel();
 
         contentPanel.setLayout(new BorderLayout());
+
+        contentPanel.add(createStartButton());
 
         frame.add(contentPanel);
     }
@@ -257,15 +268,22 @@ public class CafeteriaMenuReccomendator {
             alertFrame = new JFrame("확인");
             alertFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             alertFrame.setSize(300, 400);
-            alertFrame.setLocationRelativeTo(null);
 
+            alertFrame.add(recordLabel(),BorderLayout.NORTH);
             alertFrame.add(confirmPanel(checkBox,cafeteria));
 
             alertFrame.pack();
+            alertFrame.setLocationRelativeTo(null);
             alertFrame.setVisible(true);
         });
 
         return checkBox;
+    }
+
+    private JLabel recordLabel() {
+        JLabel label = new JLabel("기록하시겠습니까?");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
     }
 
     private JPanel confirmPanel(JCheckBox checkBox, String cafeteria) {
@@ -274,23 +292,27 @@ public class CafeteriaMenuReccomendator {
         confirmButton.addActionListener(e -> {
             // 여기에서 저장해야됨, 단 오늘의 메뉴
 
-            Menu checkedMenu = switch (cafeteria){
+            Menu recordedMenu = switch (cafeteria){
                 case "금정회관" -> todayRestaurants.get(0).menus().get(0);
                 case "학생회관" -> todayRestaurants.get(1).menus().get(0);
                 case "교직원식당" -> todayRestaurants.get(2).menus().get(0);
                 default -> null;
             };
 
-            Nutrition nutrition = switch (cafeteria){
+            recordedMenus.add(recordedMenu);
+
+            Nutrition recordedNutrition = switch (cafeteria){
                 case "금정회관" -> todayRestaurants.get(0).nutritions().get(0);
                 case "학생회관" -> todayRestaurants.get(1).nutritions().get(0);
                 case "교직원식당" -> todayRestaurants.get(2).nutritions().get(0);
                 default -> null;
             };
 
+            recordedNutritions.add(recordedNutrition);
+
             try {
-                recordLoader.saveMenu(checkedMenu);
-                recordLoader.saveNutrition(nutrition);
+                recordLoader.saveMenu(recordedMenus);
+                recordLoader.saveNutrition(recordedNutritions);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
