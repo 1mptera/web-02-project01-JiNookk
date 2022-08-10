@@ -10,30 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Sort {
-
-    public static void main(String[] args) {
-        SystemStatus systemStatus = new SystemStatus();
-
-        System.out.println(systemStatus.date());
-
-        SystemStatus s1 = new SystemStatus();
-
-        SystemStatus s2 = new SystemStatus();
-
-        SystemStatus s3 = new SystemStatus();
-
-        s1.setDate("1");
-        System.out.println(systemStatus.date());
-
-        s2.setDate("2");
-        System.out.println(systemStatus.date());
-
-        s3.setDate("3");
-        System.out.println(systemStatus.date());
-
-
-    }
-
     public String[] sortByNutrition(List<Restaurant> restaurants, String nutrition) {
         List<Restaurant> restaurantLists = sortRestaurants(restaurants, nutrition);
 
