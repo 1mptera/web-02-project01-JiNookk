@@ -70,4 +70,21 @@ class SystemStatusTest {
 
         assertEquals(2,index);
     }
+
+    @Test
+    void compareNutritionCounts(){
+        SystemStatus systemStatus = new SystemStatus();
+
+        List<Nutrition> recordedNutritions = List.of(
+                new Nutrition(0,10,0,0,0,0),
+                new Nutrition(0,10,0,0,0,0),
+                new Nutrition(0,10,0,0,0,0),
+                new Nutrition(0,10,0,0,0,0),
+                new Nutrition(0,10,0,0,0,0)
+        );
+
+        systemStatus.initNutritionCounts(recordedNutritions);
+
+        assertEquals("당류",systemStatus.compareNutritionCounts());
+    }
 }
