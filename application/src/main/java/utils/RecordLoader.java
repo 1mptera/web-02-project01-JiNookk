@@ -30,8 +30,7 @@ public class RecordLoader {
 
 
     public void saveMenu(List<Menu> menus) throws IOException {
-        FileWriter fileWriter = new FileWriter("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01" +
-                "-JiNookk/application/src/main/resources/records/menus/먹었던메뉴.csv");
+        FileWriter fileWriter = new FileWriter("./src/main/resources/records/menus/먹었던메뉴.csv");
 
         for (Menu menu : menus){
             String line = toCsvRowMenu(menu);
@@ -43,8 +42,7 @@ public class RecordLoader {
     }
 
     public void saveNutrition(List<Nutrition> nutritions) throws IOException {
-        FileWriter fileWriter = new FileWriter("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01" +
-                "-JiNookk/application/src/main/resources/records/nutritions/영양성분.csv");
+        FileWriter fileWriter = new FileWriter("./src/main/resources/records/nutritions/영양성분.csv");
 
         for (Nutrition nutrition : nutritions){
             String line = toCsvRowNutrition(nutrition);
@@ -68,8 +66,7 @@ public class RecordLoader {
     public List<Menu> loadMenus() throws FileNotFoundException {
         List<Menu> loadedMenus = new ArrayList<>();
 
-        File file = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                "application/src/main/resources/records/menus/먹었던메뉴.csv");
+        File file = new File("./src/main/resources/records/menus/먹었던메뉴.csv");
 
         Scanner scanner = new Scanner(file);
 
@@ -89,8 +86,7 @@ public class RecordLoader {
     public List<Nutrition> loadNutritions() throws FileNotFoundException {
         List<Nutrition> loadedNutritions = new ArrayList<>();
 
-        File file = new File("/Users/jingwook/Desktop/study/programming/megaptera/web-02-project01-JiNookk/" +
-                "application/src/main/resources/records/nutritions/영양성분.csv");
+        File file = new File("./src/main/resources/records/nutritions/영양성분.csv");
 
         Scanner scanner = new Scanner(file);
 

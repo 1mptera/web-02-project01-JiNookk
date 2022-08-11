@@ -68,7 +68,7 @@ public class SystemStatus {
         }
     }
 
-    public List<Integer> nutritionCounts(List<Nutrition> recordedNutritions) {
+    public void initNutritionCounts(List<Nutrition> recordedNutritions) {
         for (Nutrition nutrition : recordedNutritions) {
             if (nutrition.carbonHydrate() >= Nutrition.CARBONHYDRATESTANDARD) {
                 carbonHydrateCount += 1;
@@ -89,35 +89,6 @@ public class SystemStatus {
                 caloriesCount += 1;
             }
         }
-
-        List<Integer> nutritionCounts = List.of(carbonHydrateCount, sugarCount, proteinCount,
-                fatCount, saturatedFatCount, caloriesCount);
-
-        return nutritionCounts;
-    }
-
-    public int carbonHydrateCount() {
-        return carbonHydrateCount;
-    }
-
-    public int sugarCount() {
-        return sugarCount;
-    }
-
-    public int proteinCount() {
-        return proteinCount;
-    }
-
-    public int fatCount() {
-        return fatCount;
-    }
-
-    public int saturatedFatCount() {
-        return saturatedFatCount;
-    }
-
-    public int caloriesCount() {
-        return caloriesCount;
     }
 
     public void initCurrentRestaurant(List<Restaurant> restaurants, List<Restaurant> currentRestaurants) {
@@ -144,5 +115,65 @@ public class SystemStatus {
                 );
             }
         }
+    }
+
+    public int carbonHydrateCount() {
+        return carbonHydrateCount;
+    }
+
+    public int sugarCount() {
+        return sugarCount;
+    }
+
+    public int proteinCount() {
+        return proteinCount;
+    }
+
+    public int fatCount() {
+        return fatCount;
+    }
+
+    public int saturatedFatCount() {
+        return saturatedFatCount;
+    }
+
+    public int caloriesCount() {
+        return caloriesCount;
+    }
+
+    public String compareNutritionCounts() {
+        int[] nutritionCounts = new int[]{carbonHydrateCount, sugarCount, proteinCount,
+                fatCount, saturatedFatCount, caloriesCount};
+
+        int max = 0;
+
+        for (int nutritionCount : nutritionCounts) {
+            if (nutritionCount > max) {
+                max = nutritionCount;
+            }
+        }
+
+        String nutritionCount = "";
+
+        if (max == carbonHydrateCount) {
+            nutritionCount = Nutrition.CARBONHYDRATE;
+        }
+        if (max == sugarCount) {
+            nutritionCount = Nutrition.SUGAR;
+        }
+        if (max ==proteinCount) {
+            nutritionCount = Nutrition.PROTEIN;
+        }
+        if (max == fatCount) {
+            nutritionCount = Nutrition.FAT;
+        }
+        if (max == saturatedFatCount) {
+            nutritionCount = Nutrition.SATURATEDFAT;
+        }
+        if (max == caloriesCount) {
+            nutritionCount = Nutrition.CALORIES;
+        }
+
+        return nutritionCount;
     }
 }
