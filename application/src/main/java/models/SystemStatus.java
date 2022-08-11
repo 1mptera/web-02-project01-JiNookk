@@ -2,6 +2,8 @@ package models;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SystemStatus {
@@ -161,7 +163,7 @@ public class SystemStatus {
         if (max == sugarCount) {
             nutritionCount = Nutrition.SUGAR;
         }
-        if (max ==proteinCount) {
+        if (max == proteinCount) {
             nutritionCount = Nutrition.PROTEIN;
         }
         if (max == fatCount) {
@@ -175,5 +177,40 @@ public class SystemStatus {
         }
 
         return nutritionCount;
+    }
+
+    public Restaurant recommendRestaurant(List<Restaurant> todayRestaurants, String favoriteNutrition) {
+        List<Integer> favoriteNutritions = new ArrayList<>();
+
+        for (Restaurant todayRestaurant : todayRestaurants) {
+            switch (favoriteNutrition) {
+                case Nutrition.CARBONHYDRATE ->
+                        favoriteNutritions.add(todayRestaurant.nutritions().get(0).carbonHydrate());
+                case Nutrition.SUGAR ->
+                        favoriteNutritions.add(todayRestaurant.nutritions().get(0).sugar());
+                case Nutrition.PROTEIN ->
+                        favoriteNutritions.add(todayRestaurant.nutritions().get(0).protein());
+                case Nutrition.FAT ->
+                        favoriteNutritions.add(todayRestaurant.nutritions().get(0).fat());
+                case Nutrition.SATURATEDFAT ->
+                        favoriteNutritions.add(todayRestaurant.nutritions().get(0).saturatedFat());
+                case Nutrition.CALORIES ->
+                        favoriteNutritions.add(todayRestaurant.nutritions().get(0).calories());
+                default -> favoriteNutritions.add(null);
+            }
+        }
+
+        int [] favoriteNutritionArray = favoriteNutritions.stream().
+                mapToInt(Integer::intValue).
+                toArray();
+
+        Arrays.sort(favoriteNutritionArray);
+
+        int max = favoriteNutritionArray[favoriteNutritionArray.length-1];
+
+        int i = favoriteNutritions.indexOf(max);
+
+        Restaurant recommendRestaurant = todayRestaurants.get(i);
+        return recommendRestaurant;
     }
 }

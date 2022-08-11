@@ -87,4 +87,32 @@ class SystemStatusTest {
 
         assertEquals("당류",systemStatus.compareNutritionCounts());
     }
+
+    @Test
+    void recommendRestaurant(){
+        SystemStatus systemStatus = new SystemStatus();
+
+        List<Restaurant> todayRestaurants = List.of(
+                new Restaurant("학생회관",
+                        List.of(),
+                        List.of(new Nutrition(0,0,10,0,0,0)),
+                        5500),
+                new Restaurant("금정회관",
+                        List.of(),
+                        List.of(new Nutrition(0,0,100,0,0,0)),
+                        3500),
+                new Restaurant("교직원식당",
+                        List.of(),
+                        List.of(new Nutrition(0,0,15,0,0,0)),
+                        5500)
+        );
+
+        Restaurant recommendedRestaurant = systemStatus.recommendRestaurant(todayRestaurants,Nutrition.PROTEIN);
+        assertEquals(new Restaurant("금정회관",
+                List.of(),
+                List.of(new Nutrition(0,0,100,0,0,0)),
+                3500), recommendedRestaurant
+        );
+    }
+
 }
