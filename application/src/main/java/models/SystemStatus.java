@@ -10,7 +10,6 @@ public class SystemStatus {
     private static String date = "";
     private static int index = 0;
     private boolean isRecorded = false;
-    private int todayMenuIndex = 0;
 
     private int carbonHydrateCount = 0;
     private int sugarCount = 0;
@@ -109,30 +108,6 @@ public class SystemStatus {
                 );
             }
         }
-    }
-
-    public int carbonHydrateCount() {
-        return carbonHydrateCount;
-    }
-
-    public int sugarCount() {
-        return sugarCount;
-    }
-
-    public int proteinCount() {
-        return proteinCount;
-    }
-
-    public int fatCount() {
-        return fatCount;
-    }
-
-    public int saturatedFatCount() {
-        return saturatedFatCount;
-    }
-
-    public int caloriesCount() {
-        return caloriesCount;
     }
 
     public String compareNutritionCounts() {
