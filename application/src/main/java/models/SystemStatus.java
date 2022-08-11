@@ -54,14 +54,6 @@ public class SystemStatus {
         return isRecorded;
     }
 
-    public int todayMenuIndex() {
-        return todayMenuIndex;
-    }
-
-    public void initTodayMenuIndex() {
-        todayMenuIndex += 1;
-    }
-
     public void isRecorded(List<Menu> recordedMenus) {
         for (Menu menu : recordedMenus) {
             if (menu.date().equals(date)) {
