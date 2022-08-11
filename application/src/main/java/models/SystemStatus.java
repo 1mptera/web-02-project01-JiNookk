@@ -61,7 +61,7 @@ public class SystemStatus {
     }
 
     public void isRecorded(List<Menu> recordedMenus) {
-        for (Menu menu : recordedMenus){
+        for (Menu menu : recordedMenus) {
             if (menu.date().equals(date)) {
                 initRecorded();
             }
@@ -69,23 +69,23 @@ public class SystemStatus {
     }
 
     public List<Integer> nutritionCounts(List<Nutrition> recordedNutritions) {
-        for (Nutrition nutrition : recordedNutritions){
-            if (nutrition.carbonHydrate() >= Nutrition.CARBONHYDRATESTANDARD){
+        for (Nutrition nutrition : recordedNutritions) {
+            if (nutrition.carbonHydrate() >= Nutrition.CARBONHYDRATESTANDARD) {
                 carbonHydrateCount += 1;
             }
-            if (nutrition.sugar() >= Nutrition.SUGARSTANDARD){
+            if (nutrition.sugar() >= Nutrition.SUGARSTANDARD) {
                 sugarCount += 1;
             }
-            if (nutrition.protein() >= Nutrition.PROTEINSTANDARD){
+            if (nutrition.protein() >= Nutrition.PROTEINSTANDARD) {
                 proteinCount += 1;
             }
-            if (nutrition.fat() >= Nutrition.FATSTANDARD){
+            if (nutrition.fat() >= Nutrition.FATSTANDARD) {
                 fatCount += 1;
             }
-            if (nutrition.saturatedFat() >= Nutrition.SATURATEDFATSTANDARD){
+            if (nutrition.saturatedFat() >= Nutrition.SATURATEDFATSTANDARD) {
                 saturatedFatCount += 1;
             }
-            if (nutrition.calories() >= Nutrition.CALORIESTANDARD){
+            if (nutrition.calories() >= Nutrition.CALORIESTANDARD) {
                 caloriesCount += 1;
             }
         }
@@ -118,5 +118,31 @@ public class SystemStatus {
 
     public int caloriesCount() {
         return caloriesCount;
+    }
+
+    public void initCurrentRestaurant(List<Restaurant> restaurants, List<Restaurant> currentRestaurants) {
+        List<Menu> menus = restaurants.get(0).menus();
+        for (int i = 0; i < menus.size(); i += 1) {
+            if (date.equals(menus.get(i).date())) {
+                int index = i;
+                currentRestaurants = List.of(
+                        new Restaurant(restaurants.get(0).name(),
+                                List.of(restaurants.get(0).menus().get(index)),
+                                List.of(restaurants.get(0).nutritions().get(index)),
+                                restaurants.get(0).price()
+                        ),
+                        new Restaurant(restaurants.get(1).name(),
+                                List.of(restaurants.get(1).menus().get(index)),
+                                List.of(restaurants.get(1).nutritions().get(index)),
+                                restaurants.get(1).price()
+                        ),
+                        new Restaurant(restaurants.get(2).name(),
+                                List.of(restaurants.get(2).menus().get(index)),
+                                List.of(restaurants.get(2).nutritions().get(index)),
+                                restaurants.get(2).price()
+                        )
+                );
+            }
+        }
     }
 }
