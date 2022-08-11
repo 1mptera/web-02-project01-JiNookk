@@ -10,6 +10,10 @@ public class Restaurant {
     public static final String GEUMJEONG = "금정회관";
     public static final String STUDENTHALL = "학생회관";
     public static final String STAFFCAFETERIA = "교직원식당";
+    public static final int GEUMJEONGPRICE = 3500;
+    public static final int STUDENTHALLPRICE = 5500;
+    public static final int STAFFCAFETERIAPRICE = 5500;
+
     private final SystemStatus systemStatus = new SystemStatus();
 
     private String restaurantName;
