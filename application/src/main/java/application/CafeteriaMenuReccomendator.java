@@ -34,7 +34,7 @@ public class CafeteriaMenuReccomendator {
     private static JPanel contentPanel;
     private static JPanel buttonPanel;
     private static JPanel menuPanel;
-    private final RecordLoader recordLoader = new RecordLoader();
+    private  RecordLoader recordLoader;
     private SystemStatus systemStatus;
 
     private Loader loader;
@@ -47,6 +47,8 @@ public class CafeteriaMenuReccomendator {
     private JFrame alertFrame;
     private List<Menu> recordedMenus;
     private List<Nutrition> recordedNutritions;
+    private List<Integer> preferNutritionCounts;
+    private JPanel displayPanel;
 
     public static void main(String[] args) throws FileNotFoundException {
         CafeteriaMenuReccomendator application = new CafeteriaMenuReccomendator();
@@ -63,25 +65,27 @@ public class CafeteriaMenuReccomendator {
 
         initContentPanel();
 
-        initMenuPanel();
+        initDisplayPanel();
 
         frame.setVisible(true);
     }
 
     private void prepareObjects() throws FileNotFoundException {
-        urlRepository = new URLRepository();
-        loader = new Loader();
-        sort = new Sort();
         systemStatus = new SystemStatus();
         systemStatus.today();
 
-        restaurants = new ArrayList<>();
-        todayRestaurants = new ArrayList<>();
-
+        recordLoader = new RecordLoader();
         recordedMenus = recordLoader.loadMenus();
+        recordedNutritions = recordLoader.loadNutritions();
+        preferNutritionCounts = systemStatus.nutritionCounts(recordedNutritions);
         systemStatus.isRecorded(recordedMenus);
 
-        recordedNutritions = recordLoader.loadNutritions();
+        urlRepository = new URLRepository();
+        loader = new Loader();
+        sort = new Sort();
+
+        restaurants = new ArrayList<>();
+        todayRestaurants = new ArrayList<>();
     }
 
     private void initMainFrame() {
@@ -91,8 +95,8 @@ public class CafeteriaMenuReccomendator {
         frame.setLocationRelativeTo(null);
     }
 
-    public void initMenuPanel() {
-
+    public void initDisplayPanel() {
+        displayPanel = new JPanel();        //TODO : 컨텐츠 패널아래에 공간이 필요할 경우 들어가는 패널. 아직 frame에 add안해줌.
     }
 
     public void initButtonPanel() {
@@ -108,6 +112,8 @@ public class CafeteriaMenuReccomendator {
 
         contentPanel.setLayout(new BorderLayout());
 
+        setBorder(contentPanel, 300, 400, 300, 400);
+
         contentPanel.add(createStartButton());
 
         frame.add(contentPanel);
@@ -121,8 +127,8 @@ public class CafeteriaMenuReccomendator {
 
     public JButton createStartButton() {
         JButton button = new JButton("시작하기!");
-        setBorder(contentPanel, 300, 400, 300, 400);
         button.addActionListener(e -> {
+            setBorder(contentPanel, 0, 0, 0, 0);
             removeContainer(buttonPanel);
             removeContainer(contentPanel);
 
@@ -148,7 +154,55 @@ public class CafeteriaMenuReccomendator {
 
         panel.add(todayMenuButton());
         panel.add(recordMenuButton());
+        panel.add(recommendationButton());
 
+        return panel;
+    }
+
+    //
+    //
+    //
+    //
+
+    private JButton recommendationButton() {
+        JButton button = new JButton("선호하는 영양성분 보기");
+        button.addActionListener(e -> {
+            removeContainer(buttonPanel);
+            removeContainer(contentPanel);
+
+            buttonPanel.add(homeButton());
+
+            contentPanel.add(preferLabel());
+            contentPanel.add(showPreferencePanel());
+
+            updateDisplay();
+        });
+        return button;
+    }
+
+    private JButton homeButton() {
+        JButton button = new JButton("돌아가기");
+        button.addActionListener(e -> {
+            backToHome();
+        });
+        return button;
+    }
+
+    private JLabel preferLabel() {
+        JLabel label = new JLabel("선호하는 영양성분");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        return label;
+    }
+
+    private JPanel showPreferencePanel() {
+        JPanel panel = new JPanel();
+//        panel.setLayout(new GridLayout(6,1));
+        panel.add(new JLabel(Nutrition.CARBONHYDRATE + ": " +systemStatus.carbonHydrateCount()));
+        panel.add(new JLabel(Nutrition.SUGAR + ": " +systemStatus.sugarCount()));
+        panel.add(new JLabel(Nutrition.PROTEIN + ": " +systemStatus.proteinCount()));
+        panel.add(new JLabel(Nutrition.FAT + ": " +systemStatus.fatCount()));
+        panel.add(new JLabel(Nutrition.SATURATEDFAT + ": " +systemStatus.saturatedFatCount()));
+        panel.add(new JLabel(Nutrition.CALORIES + ": " +systemStatus.caloriesCount()));
         return panel;
     }
 
@@ -424,15 +478,19 @@ public class CafeteriaMenuReccomendator {
     public JButton backToMenuButton() {
         JButton button = new JButton("돌아가기");
         button.addActionListener(e -> {
-            removeContainer(buttonPanel);
             removeContainer(menuPanel);
-            removeContainer(contentPanel);
-
-            buttonPanel.add(createMenuPanel());
-
-            updateDisplay();
+            backToHome();
         });
         return button;
+    }
+
+    private void backToHome() {
+        removeContainer(buttonPanel);
+        removeContainer(contentPanel);
+
+        buttonPanel.add(createMenuPanel());
+
+        updateDisplay();
     }
 
     public JPanel menuPanel() throws FileNotFoundException {           // TODO : 메뉴와 영양성분이 배치되는 패널
@@ -529,7 +587,6 @@ public class CafeteriaMenuReccomendator {
         panel.add(cafeteriaMenu(restaurant, menu));
         panel.add(menuNutritions(nutrition, menu));
 
-        setBorder(contentPanel, 0, 0, 0, 0);
         updateDisplay();
         return panel;
     }
@@ -597,6 +654,8 @@ public class CafeteriaMenuReccomendator {
         buttonPanel.setVisible(true);
         contentPanel.setVisible(false);
         contentPanel.setVisible(true);
+        displayPanel.setVisible(false);
+        displayPanel.setVisible(true);
         frame.setVisible(true);
     }
 

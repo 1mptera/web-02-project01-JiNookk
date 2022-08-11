@@ -1,10 +1,19 @@
 package models;
 
 public class Nutrition {
+    public static final String CARBONHYDRATE = "탄수화물";
+    public static final String SUGAR = "당류";
     public static final String PROTEIN = "단백질";
-    public static final String CALORIES = "칼로리";
+    public static final String FAT = "지방";
     public static final String SATURATEDFAT = "포화지방";
+    public static final String CALORIES = "칼로리";
 
+    public static final int CARBONHYDRATESTANDARD = 18;
+    public static final int SUGARSTANDARD = 5;
+    public static final int PROTEINSTANDARD = 14;
+    public static final int FATSTANDARD = 10;
+    public static final int SATURATEDFATSTANDARD = 5;
+    public static final int CALORIESTANDARD = 250;
 
     private int carbonHydrate;
     private int sugar;
